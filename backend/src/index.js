@@ -5,6 +5,7 @@ import db from './config/connect.js';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
+import cors from 'cors';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -13,6 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.static(path.join(__dirname, 'public')));
 //
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
