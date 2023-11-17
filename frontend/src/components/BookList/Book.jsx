@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './BookList.css';
 
 const Book = (params) => {
-	const { _id, title, author, image, year } = params;
+	const { id, title, author, image, year } = params;
 
 	return (
 		<div className="book-item flex flex-column flex-sb">
@@ -11,7 +11,7 @@ const Book = (params) => {
 				<img src={image} alt="" />
 			</div>
 			<div className="book-item-info text-center">
-				<Link to={`/book/${_id}`} {...params}>
+				<Link to={`/book/${id}`} {...params}>
 					<div className="book-item-info-item title fw-7 fs-18">{title}</div>
 				</Link>
 

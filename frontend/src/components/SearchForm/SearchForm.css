@@ -9,7 +9,15 @@
 .search-form-elem .form-control {
 	font-size: 2rem;
 	padding: 0.6rem;
+	outline: none;
+	border: none;
 }
+
+.search-form-elem .form-control:focus {
+	border: none;
+	box-shadow: none;
+}
+
 .search-form-elem .form-control::placeholder {
 	opacity: 0.9;
 }

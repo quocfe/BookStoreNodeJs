@@ -1,25 +1,10 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+import mysql from 'mysql2';
 
-dotenv.config();
-
-const db = {
-	connect: async () => {
-		try {
-			await mongoose.connect(process.env.MONGO);
-			console.log('connect mongodb');
-		} catch (error) {
-			console.log(error);
-		}
-	},
-};
-
-mongoose.connection.on('disconnected', () => {
-	console.log('MONGO disconnected');
+const connection = mysql.createConnection({
+	host: 'localhost',
+	database: 'bookenodejs',
+	user: 'root',
+	password: '123456',
 });
 
-mongoose.connection.on('connected', () => {
-	console.log('MONGO connected');
-});
-
-export default db;
+export default connection;

@@ -1,6 +1,8 @@
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 let refreshTokens = [];
 
@@ -11,12 +13,12 @@ const authController = {
 			const salt = bcrypt.genSaltSync(10);
 			const hash = bcrypt.hashSync(req.body.password, salt);
 
-			const newUser = new User({
+			const newUser = {
 				username: req.body.username,
 				email: req.body.email,
 				password: hash,
-			});
-			const user = await newUser.save();
+			};
+			const user = await User.insert(newUser);
 			res.status(200).json(user);
 		} catch (error) {
 			next(error);
@@ -24,8 +26,9 @@ const authController = {
 	},
 	// GENERATEACCESSTOKEN
 	generateAccessToken: (user) => {
+		console.log('user token', user);
 		return jwt.sign(
-			{ id: user._id, isAdmin: user.isAdmin },
+			{ id: user.id, isAdmin: user.isAdmin },
 			process.env.ACCESS_TOKEN_SECRET,
 			{
 				expiresIn: '60s',
@@ -36,7 +39,7 @@ const authController = {
 	generateRefreshToken: (user) => {
 		return jwt.sign(
 			{
-				id: user._id,
+				id: user.id,
 				isAdmin: user.isAdmin,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
@@ -49,33 +52,42 @@ const authController = {
 	// LOGIN
 	login: async (req, res, next) => {
 		try {
-			const user = await User.findOne({
+			const user = await User.selectOne({
 				username: req.body.username,
 			});
 
-			if (!user) res.status(404).json('Incorrect username');
-
-			const isPassword = await bcrypt.compare(req.body.password, user.password);
-
-			if (!isPassword) res.status(404).json('Incorrect password');
-
-			if (user && isPassword) {
-				const accessToken = authController.generateAccessToken(user);
-				const refreshToken = authController.generateRefreshToken(user);
-
-				refreshTokens.push(refreshToken);
-
-				res.cookie('refreshToken', refreshToken, {
-					httpOnly: true,
-					secure: false,
-					path: '/',
-					sameSite: 'strict',
-				});
-				res.json({ accessToken, refreshToken });
+			if (!user[0]) {
+				return res.status(404).json('Incorrect username');
 			}
+			const isPassword = await bcrypt.compare(
+				req.body.password,
+				user[0].password
+			);
+
+			if (!isPassword) {
+				return res.status(404).send('Incorrect password');
+			}
+
+			const accessToken = authController.generateAccessToken(user[0]);
+			const refreshToken = authController.generateRefreshToken(user[0]);
+			console.log('accessToken', accessToken);
+			console.log('refreshToken', refreshToken);
+
+			refreshTokens.push(refreshToken);
+
+			res.cookie('refreshToken', refreshToken, {
+				httpOnly: true,
+				secure: false,
+				path: '/',
+				sameSite: 'strict',
+			});
+
+			const newUser = { ...user[0], accessToken };
+
+			return res.json({ user: newUser });
 			//
 		} catch (error) {
-			res.status(500).json(err);
+			return next(error);
 		}
 	},
 	// REQUESTREFRESHTOKEN

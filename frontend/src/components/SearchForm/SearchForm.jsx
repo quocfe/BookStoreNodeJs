@@ -1,33 +1,26 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import './SearchForm.css';
-import { useGlobalContext } from '../../context';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import './SearchForm.css';
+import { searchBook } from '../../redux/apiRequest';
 
 const SearchForm = () => {
-	const { setSearchTerm, setResultTitle } = useGlobalContext();
-	const searchText = useRef('');
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const searchText = useRef('');
 
-	const handleSearch = (e) => {
+	const handleSearch = async (e) => {
 		e.preventDefault();
-		const tempSearchTerm = searchText.current.value.trim();
-
-		if (tempSearchTerm.length === 0) {
-			setSearchTerm('');
-			setResultTitle('Please Enter Something...');
-		} else {
-			setSearchTerm(tempSearchTerm);
-		}
-
-		navigate('/book');
+		const query = searchText.current.value;
+		searchBook(query, dispatch, navigate);
 	};
 
 	return (
 		<div className="search-form">
 			<div className="container">
 				<div className="search-form-content">
-					<div className="search-form">
+					<form className="search-form" method="get" onSubmit={handleSearch}>
 						<div className="search-form-elem flex flex-sb bg-white">
 							<input
 								type="text"
@@ -35,15 +28,11 @@ const SearchForm = () => {
 								placeholder="search..."
 								ref={searchText}
 							/>
-							<button
-								type="submit"
-								className="flex flex-c"
-								onClick={handleSearch}
-							>
+							<button type="submit" className="flex flex-c">
 								<FaSearch className="text-purple" size={32} />
 							</button>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>

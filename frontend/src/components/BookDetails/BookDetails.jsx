@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { json, useNavigate, useParams } from 'react-router-dom';
 import './BookDetails.css';
-import { useGlobalContext } from '../../context';
 
 const BookDetails = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const { books } = useGlobalContext();
-	const book = books.filter((item) => item._id === id);
-	console.log(book);
-	const [{ image, title, author, year, isbn }] = book;
+	const books = useSelector((state) => state.books.data);
+	console.log(books);
+	const book = books.filter((item) => item.id == id);
+	const [{ image, author, isbn, title, year }] = book;
 
 	return (
 		<section className="book-details">
