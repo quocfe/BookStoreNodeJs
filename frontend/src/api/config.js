@@ -4,4 +4,8 @@ const axiosClient = axios.create({
 	baseURL: 'http://localhost:3000/v1/api/',
 });
 
-export default axiosClient;
+const axiosAdmin = axios.create({
+	baseURL: 'http://localhost:3000/v1/api/admin',
+});
+
+export { axiosClient, axiosAdmin };

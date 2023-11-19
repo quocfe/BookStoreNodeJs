@@ -17,23 +17,13 @@ const Nav = () => {
 					<Link to="/admin/book" className="accordion-header" type="button">
 						Sách
 					</Link>
-					<ion-icon name="cart-outline" />
 				</li>
 			</ul>
 			<ul lass="accordion accordion-flush" id="accordionCate">
 				<li className="accordionItem">
-					<a
-						className="accordion-header"
-						id="flush-headingCate"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#flush-collapseCate"
-						aria-expanded="false"
-						aria-controls="flush-collapseCate"
-					>
+					<Link to="/admin/category" className="accordion-header" type="button">
 						Danh mục
-					</a>
-					{/* icon */}
+					</Link>
 				</li>
 			</ul>
 			<ul lass="accordion accordion-flush" id="accordionFlushMember">

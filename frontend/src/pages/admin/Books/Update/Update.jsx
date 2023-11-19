@@ -1,26 +1,33 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import booksApi from '../../../../api/books';
 import { Toastify } from '../../../../components/Toast/Toast';
-import { handleUploadFile } from '../../../../helper/upload';
+import booksAdminApi from './../../../../api/admin/books';
+import { handleUploadFile } from './../../../../helper/upload';
 import UpdateForm from './Form';
-import { useParams } from 'react-router-dom';
-import './Update.css';
 
 const Update = ({ show, book, onHide }) => {
 	const handleUpdateButtonClick = async (formData) => {
-		const { id } = useParams();
 		try {
-			console.log(formData);
-			console.log(id);
-			// const urlImg = await handleUploadFile(formData.images);
-			// if (urlImg) {
-			// 	let updatedPerson = Object.assign({}, formData, {
-			// 		images: urlImg,
-			// 	});
-			// 	await booksApi.insert(updatedPerson);
-			// }
-			Toastify('success', 'Update success');
+			const idBook = book.idProduct;
+			let images;
+			let idCategory = formData?.idCategory
+				? formData.idCategory
+				: book.idCategory;
+			if (book.images != formData.images) {
+				images = await handleUploadFile(formData.images);
+			} else {
+				images = book.images;
+			}
+			if (images) {
+				let dataUpdate = {
+					...formData,
+					images,
+					idCategory,
+				};
+				await booksAdminApi.update(idBook, dataUpdate);
+				Toastify('success', 'Update success');
+				onHide();
+			}
 		} catch (error) {
 			Toastify('error', 'Update error');
 			console.log(error);

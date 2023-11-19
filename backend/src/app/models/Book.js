@@ -70,7 +70,7 @@ const Book = {
 		}
 	},
 
-	delete: async ({ id }) => {
+	delete: async (id) => {
 		const sql = `DELETE FROM books WHERE idProduct = ?`;
 
 		try {
@@ -82,7 +82,7 @@ const Book = {
 	},
 
 	search: async (query) => {
-		const sql = `SELECT * FROM books WHERE title LIKE ?`;
+		const sql = `SELECT * FROM books WHERE nameProduct LIKE ?`;
 
 		try {
 			const results = await executeQuery(sql, [`%${query}%`]);
@@ -134,6 +134,15 @@ const Book = {
 		try {
 			const results = await executeQuery(sql, values);
 			return results;
+		} catch (error) {
+			throw error;
+		}
+	},
+	updateView: async (id) => {
+		console.log('update view');
+		const sql = `UPDATE books SET view = view + 1 WHERE idProduct = ?`;
+		try {
+			await executeQuery(sql, [+id]);
 		} catch (error) {
 			throw error;
 		}

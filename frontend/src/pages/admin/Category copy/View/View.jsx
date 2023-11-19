@@ -3,11 +3,11 @@ import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import booksAdminApi from '../../../../api/admin/books';
+import booksApi from '../../../../api/client/books';
 import { Toastify } from '../../../../components/Toast/Toast';
 import Layout from '../../Layout/Layout';
 import Add from '../Add/Add';
 import Update from '../Update/Update';
-import booksApi from './../../../../api/client/books';
 import './View.css';
 
 const View = () => {

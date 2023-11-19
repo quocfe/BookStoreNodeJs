@@ -12,7 +12,7 @@ const categoryController = {
 	add: async (req, res) => {
 		try {
 			const newCate = {
-				idCategory: req.body.idCategory,
+				nameCategory: req.body.nameCategory,
 			};
 
 			await Category.insert(newCate);
@@ -24,7 +24,7 @@ const categoryController = {
 	delete: async (req, res) => {
 		const idCate = req.params.id;
 		try {
-			await Category.delete({ idCategory: idCate });
+			await Category.delete(idCate);
 			res.status(200).json('delete success');
 		} catch (error) {
 			res.status(500).json(error);
@@ -42,9 +42,11 @@ const categoryController = {
 	update: async (req, res) => {
 		try {
 			const idBook = req.params.id;
+			const newCate = {
+				nameCategory: req.body.nameCategory,
+			};
 
-			await Category.updateOne({ _id: idBook }, req.body);
-			// sais
+			await Category.update(idBook, newCate);
 			res.status(200).json('update success');
 		} catch (error) {
 			res.status(500).json(error);

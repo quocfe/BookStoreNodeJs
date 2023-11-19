@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../../components/Header/Header';
+import BookList from '../../../components/BookList/BookList';
 // import { axiosClient } from '../../../api/config';
-import authApi from '../../../api/auth';
-import { loginSuccess } from '../../../redux/authSlice';
 
 const Home = () => {
 	const user = useSelector((state) => state.auth.login.currentUser);
@@ -23,7 +22,7 @@ const Home = () => {
 	return (
 		<main>
 			<Header />
-			<Outlet />
+			<BookList />
 		</main>
 	);
 };

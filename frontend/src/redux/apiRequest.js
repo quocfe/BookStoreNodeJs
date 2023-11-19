@@ -1,5 +1,5 @@
-import booksApi from './../api/books';
-import authApi from '../api/auth';
+import authApi from './../api/client/auth';
+import booksApi from './../api/client/books';
 import {
 	loginFail,
 	loginStart,
@@ -37,10 +37,19 @@ const searchBook = async (query, dispatch, navigate) => {
 	try {
 		const response = await booksApi.search(query);
 		dispatch(searchFetch(response.data));
+		navigate('/');
+	} catch (error) {
+		console.log(error);
+	}
+};
+const fetchBook = async (query, dispatch, navigate) => {
+	try {
+		const response = await booksApi.getAll(query);
+		dispatch(getAllBook(response.data));
 		navigate('/book');
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-export { loginUser, registerUser, searchBook };
+export { loginUser, registerUser, searchBook, fetchBook };

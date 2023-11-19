@@ -29,7 +29,6 @@ const Category = {
 	},
 	selectAll: async () => {
 		const sql = `SELECT * FROM category`;
-
 		try {
 			const results = await executeQuery(sql);
 			return results;
@@ -47,11 +46,22 @@ const Category = {
 			throw error;
 		}
 	},
-	delete: async ({ id }) => {
+	delete: async (id) => {
 		const sql = `DELETE FROM category WHERE idCategory = ?`;
 
 		try {
 			const results = await executeQuery(sql, [id]);
+			return results;
+		} catch (error) {
+			throw error;
+		}
+	},
+	update: async (id, { nameCategory }) => {
+		console.log(id, nameCategory);
+		const sql = 'UPDATE category SET nameCategory = ? WHERE idCategory = ?';
+		const values = [nameCategory, +id];
+		try {
+			const results = await executeQuery(sql, values);
 			return results;
 		} catch (error) {
 			throw error;

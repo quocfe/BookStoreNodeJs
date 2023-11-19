@@ -1,4 +1,4 @@
-import axiosClient from './config';
+import { axiosClient } from '../config';
 
 const booksApi = {
 	insert(data) {
@@ -18,8 +18,12 @@ const booksApi = {
 		return axiosClient.get(url);
 	},
 	update(id, data) {
-		const url = `update/${id}`;
+		const url = `book/update/${id}`;
 		return axiosClient.put(url, data);
+	},
+	delete(id) {
+		const url = `book/delete/${id}`;
+		return axiosClient.delete(url);
 	},
 };
 

@@ -1,11 +1,8 @@
 import express from 'express';
-import bookController from '../app/controllers/bookController.js';
+import bookController from '../../app/controllers/bookController.js';
 
 const router = express.Router();
 
-// router.get('/:isbn', (req, res) => {});
-// Search book
-router.get('/search', bookController.search);
 // Update book
 router.put('/update/:id', bookController.update);
 // Edit

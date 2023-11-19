@@ -1,5 +1,4 @@
-import updateImgApi from './../api/updateImg';
-
+import updateImgApi from './../api/admin/updateImg';
 export const handleUploadFile = async (file) => {
 	try {
 		const response = await updateImgApi.updateImg(file);

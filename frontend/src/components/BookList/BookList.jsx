@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import './BookList.css';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import Book from './Book';
-import booksApi from '../../api/books';
+import './BookList.css';
 
 const BookList = () => {
 	const books = useSelector((state) => state.books.data);
+	// const [books, setBooks] = useState([]);
+	console.log(books);
+	// useSelector(() => {
+	// 	try {
+	// 		const response =
+	// 	} catch (error) {
+	// 		console.log(error)
+	// 	}
+	// }, [])
 
 	return (
 		<section className="booklist">

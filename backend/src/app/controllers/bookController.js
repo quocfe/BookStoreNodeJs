@@ -12,6 +12,7 @@ const bookController = {
 	selectOne: async (req, res) => {
 		const id = req.params.id;
 		try {
+			await Book.updateView(id);
 			const book = await Book.selectOne(id);
 			res.status(200).json(book);
 		} catch (error) {
@@ -41,7 +42,7 @@ const bookController = {
 	delete: async (req, res) => {
 		const idBook = req.params.id;
 		try {
-			await Book.delete({ idProduct: idBook });
+			await Book.delete(idBook);
 			res.status(200).json('delete success');
 		} catch (error) {
 			res.status(500).json(error);

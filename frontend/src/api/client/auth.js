@@ -1,4 +1,4 @@
-import axiosClient from './config';
+import { axiosClient } from '../config';
 
 const authApi = {
 	register(user) {

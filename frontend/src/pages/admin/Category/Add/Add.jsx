@@ -1,21 +1,16 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import booksAdminApi from '../../../../api/admin/books';
+import categoryAdminApi from './../../../../api/admin/category';
 import { Toastify } from './../../../../components/Toast/Toast';
-import { handleUploadFile } from './../../../../helper/upload';
 import './Add.css';
 import AddForm from './Form';
 
 const Add = ({ show, onHide }) => {
 	const handleAddButtonClick = async (formData) => {
 		try {
-			const urlImg = await handleUploadFile(formData.images);
-			if (urlImg) {
-				let updatedPerson = { ...formData, images: urlImg };
-				await booksAdminApi.insert(updatedPerson);
-				Toastify('success', 'Add success');
-				onHide();
-			}
+			await categoryAdminApi.insert(formData);
+			Toastify('success', 'Add success');
+			onHide();
 		} catch (error) {
 			Toastify('error', 'Add error');
 			console.log(error);
