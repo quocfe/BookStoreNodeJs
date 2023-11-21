@@ -3,7 +3,6 @@
 }
 
 .book-details .container {
-	background: #fff;
 	padding: 4rem;
 }
 
@@ -21,6 +20,8 @@
 .book-details-content {
 	gap: 4rem;
 	background: #fff;
+	padding: 2rem 4rem;
+	border-radius: 8px;
 }
 .book-details-img {
 	max-height: 600px;
@@ -56,9 +57,21 @@
 	border-radius: 8px;
 }
 
-.book-details .book-description {
+.book-details .book-description,
+.book-details .community-reviews,
+.book-details .rating-review {
 	background: #fff;
 	margin-top: 3rem;
+	padding: 2rem 4rem;
+	border-radius: 8px;
+}
+
+.book-details .rating-review .rounded-circle {
+	width: 90px;
+	height: 90px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .book-details .book-description h3 {
@@ -72,6 +85,25 @@
 
 .book-details .book-description .description-text {
 	text-align: justify;
+}
+
+.book-details .info-reviewer img {
+	width: 50px;
+	height: 50px;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.book-details .box-review {
+	min-height: 150px;
+	padding: 30px 10px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.book-details .box-review .content-review img {
+	object-fit: cover;
+	height: 80vh;
 }
 
 @media screen and (min-width: 768px) {

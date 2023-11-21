@@ -12,7 +12,7 @@ const userController = {
 	getUser: async (req, res) => {
 		const id = req.params.id;
 		try {
-			const user = await User.selectOne({ id });
+			const user = await User.selectOne({ idUser: id });
 			res.status(200).json(user);
 		} catch (error) {
 			res.status(500).json(error);

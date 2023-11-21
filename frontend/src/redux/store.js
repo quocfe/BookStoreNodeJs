@@ -12,6 +12,7 @@ import {
 	REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import reviewSlice from './reviewSlice';
 
 const persistConfig = {
 	key: 'root',
@@ -19,7 +20,11 @@ const persistConfig = {
 	storage,
 	blacklist: ['auth'],
 };
-const rootReducer = combineReducers({ books: bookReducer, auth: authSlice });
+const rootReducer = combineReducers({
+	books: bookReducer,
+	auth: authSlice,
+	review: reviewSlice,
+});
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({

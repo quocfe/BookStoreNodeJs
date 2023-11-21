@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
-import logoImg from '../../images/logo.png';
 import { HiOutlineMenuAlt3 } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import logoImg from '../../images/logo.png';
+import { logOut } from '../../redux/apiRequest';
 import './Navbar.css';
-import { useSelector } from 'react-redux';
 
 const Navbar = () => {
 	const [toggleMenu, setToggleMenu] = useState(false);
 	const handleNavbar = () => setToggleMenu(!toggleMenu);
 	const user = useSelector((state) => state.auth.login.currentUser);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	console.log('user', user);
+	const handleLogout = () => {
+		console.log('click');
+		logOut(dispatch, navigate);
+	};
+
 	return (
 		<nav className="navbar" id="navbar">
 			<div className="container navbar-content flex flex-nowrap">
 				<div className="brand-and-toggler flex flex-sb">
-					<Link to="/" className="navbar-brand flex">
+					<Link to="/home" className="navbar-brand flex">
 						<img src={logoImg} alt="site logo" />
 						<span className="text-uppercase fw-7 fs-24 ls-1">bookpoly</span>
 					</Link>
@@ -63,11 +72,8 @@ const Navbar = () => {
 										{user.username}
 									</Link>
 								</li>
-								<li className="nav-item">
-									<Link
-										to="logout"
-										className="nav-link text-uppercase  fs-22 fw-6 ls-1"
-									>
+								<li className="nav-item cursor-pointer" onClick={handleLogout}>
+									<Link className="nav-link text-uppercase fs-22 fw-6 ls-1">
 										Log out
 									</Link>
 								</li>
@@ -76,7 +82,7 @@ const Navbar = () => {
 							<>
 								<li className="nav-item">
 									<Link
-										to="signin"
+										to="/signin"
 										className="nav-link text-uppercase  fs-22 fw-6 ls-1"
 									>
 										Sign In
@@ -84,7 +90,7 @@ const Navbar = () => {
 								</li>
 								<li className="nav-item">
 									<Link
-										to="signup"
+										to="/signup"
 										className="nav-link text-uppercase  fs-22 fw-6 ls-1"
 									>
 										Sign Up

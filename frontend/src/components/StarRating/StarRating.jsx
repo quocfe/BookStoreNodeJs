@@ -20,7 +20,7 @@ const StarRating = ({ onRatingChange }) => {
 	};
 
 	return (
-		<div className="mt-2">
+		<div className="">
 			{[1, 2, 3, 4, 5].map((index) => (
 				<FaStar
 					key={index}

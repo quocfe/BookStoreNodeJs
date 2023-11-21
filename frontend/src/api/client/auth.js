@@ -9,11 +9,13 @@ const authApi = {
 		const url = 'auth/login';
 		return axiosClient.post(url, user);
 	},
-	refreshToken() {
+	refreshToken(refreshToken) {
 		const url = `auth/refreshToken`;
-		return axiosClient.post(url, {
-			withCredentials: true,
-		});
+		return axiosClient.post(url, refreshToken);
+	},
+	logout() {
+		const url = `auth/logout`;
+		return axiosClient.delete(url);
 	},
 };
 

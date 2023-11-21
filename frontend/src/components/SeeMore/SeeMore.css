@@ -1,12 +1,12 @@
 .btn-seemore {
-	background: #0093e9;
-	color: #fff;
-	text-decoration: none;
-	border: 1px solid #0093e9;
+	background: #0093e9 !important;
+	color: #fff !important;
+	text-decoration: none !important;
+	border: 1px solid #0093e9 !important;
 }
 
 .btn-seemore:hover {
-	background: #fff;
-	border: 1px solid #0093e9;
-	color: #0093e9;
+	background: #fff !important;
+	border: 1px solid #0093e9 !important;
+	color: #0093e9 !important;
 }

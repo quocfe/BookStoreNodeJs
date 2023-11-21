@@ -17,8 +17,12 @@ const SeeMore = ({ text }) => {
 				}}
 			/>
 			{text.length > 200 && (
-				<Button className="btn-seemore" variant="link" onClick={toggleShowMore}>
-					{showMore ? 'Ẩn bớt' : 'Xen thêm'}
+				<Button
+					className="btn-seemore mt-2"
+					variant="link"
+					onClick={toggleShowMore}
+				>
+					{showMore ? 'Ẩn bớt' : 'Xem thêm'}
 				</Button>
 			)}
 		</div>

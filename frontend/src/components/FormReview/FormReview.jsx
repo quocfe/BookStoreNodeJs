@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import Button from 'react-bootstrap/esm/Button';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/esm/Button';
+import { useDispatch } from 'react-redux';
+import { setReviews } from '../../redux/reviewSlice';
+import reviewApi from './../../api/client/review';
 import StarRating from './../StarRating/StarRating';
 
-const FormReview = ({ show, onHide, title }) => {
+const FormReview = ({ show, onHide, title, idProduct }) => {
+	const dispatch = useDispatch();
 	const [formData, setFormData] = useState({
 		content: '',
 		rating: 0,
@@ -18,8 +22,21 @@ const FormReview = ({ show, onHide, title }) => {
 		}));
 	};
 
-	const handleSubmit = () => {
-		console.log(formData);
+	const handleSubmit = async () => {
+		const newData = { ...formData, idUser: 1, idProduct: +idProduct };
+		try {
+			await reviewApi.insert(newData);
+			const response = await reviewApi.getAll();
+			dispatch(setReviews(response.data));
+			alert('Đăng review thành công');
+			onHide();
+			setFormData({
+				content: '',
+				rating: 0,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (

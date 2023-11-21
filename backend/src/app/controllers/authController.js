@@ -31,7 +31,7 @@ const authController = {
 			{ id: user.id, isAdmin: user.isAdmin },
 			process.env.ACCESS_TOKEN_SECRET,
 			{
-				expiresIn: '60s',
+				expiresIn: '10s',
 			}
 		);
 	},
@@ -43,12 +43,10 @@ const authController = {
 				isAdmin: user.isAdmin,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
-			{ expiresIn: '365d' }
+			{ expiresIn: '30d' }
 		);
 	},
-	loginView: (req, res) => {
-		res.render('login');
-	},
+
 	// LOGIN
 	login: async (req, res, next) => {
 		try {
@@ -70,19 +68,10 @@ const authController = {
 
 			const accessToken = authController.generateAccessToken(user[0]);
 			const refreshToken = authController.generateRefreshToken(user[0]);
-			console.log('accessToken', accessToken);
-			console.log('refreshToken', refreshToken);
 
 			refreshTokens.push(refreshToken);
 
-			res.cookie('refreshToken', refreshToken, {
-				httpOnly: true,
-				secure: false,
-				path: '/',
-				sameSite: 'strict',
-			});
-
-			const newUser = { ...user[0], accessToken };
+			const newUser = { ...user[0], accessToken, refreshToken };
 
 			return res.json({ user: newUser });
 			//
@@ -93,7 +82,7 @@ const authController = {
 	// REQUESTREFRESHTOKEN
 	requestRefreshToken: async (req, res) => {
 		//Take refresh token from user
-		const refreshToken = req.cookies.refreshToken;
+		const refreshToken = req.body.refreshToken;
 		//Send error if token is not valid
 		if (!refreshToken) return res.status(401).json("You're not authenticated");
 		if (!refreshTokens.includes(refreshToken)) {
@@ -105,12 +94,7 @@ const authController = {
 			const newAccessToken = authController.generateAccessToken(data);
 			const newRefreshToken = authController.generateRefreshToken(data);
 			refreshTokens.push(newRefreshToken);
-			res.cookie('refreshToken', refreshToken, {
-				httpOnly: true,
-				secure: false,
-				path: '/',
-				sameSite: 'strict',
-			});
+
 			res.status(200).json({
 				accessToken: newAccessToken,
 				refreshToken: newRefreshToken,
@@ -119,9 +103,9 @@ const authController = {
 	},
 	//LOG OUT
 	logOut: async (req, res) => {
-		//Clear cookies when user logs out
-		refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
-		res.clearCookie('refreshToken');
+		refreshTokens = refreshTokens.filter(
+			(token) => token !== req.headers.token
+		);
 		res.status(200).json('Logged out successfully!');
 	},
 };
