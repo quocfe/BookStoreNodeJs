@@ -10,34 +10,27 @@ import Header from './../../../components/Header/Header';
 import SeeMore from './../../../components/SeeMore/SeeMore';
 import './BookDetails.css';
 import Star from './component/Star/Star';
+import booksApi from '../../../api/client/books';
 
 const BookDetails = () => {
 	const { id } = useParams();
 	const [show, setShow] = useState(false);
 	const [reviews, setReviews] = useState([]);
+	const [book, setBook] = useState([]);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const books = useSelector((state) => state.books.data);
+	// const books = useSelector((state) => state.books.data);
+	// const book = books.filter((item) => item.idProduct == id);
 	const reviewState = useSelector((state) => state.review.data);
-	const book = books.filter((item) => item.idProduct == id);
-	const [
-		{
-			images,
-			authorProduct,
-			isbn,
-			nameProduct,
-			year,
-			sortDescription,
-			description,
-		},
-	] = book;
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const response = await reviewApi.selectByProduct(id);
+				const bookResponse = await booksApi.getOne(id);
+				setBook(bookResponse.data);
 				setReviews(response.data);
 				dispatch(setReviewsRedux(response.data));
 			} catch (error) {
@@ -53,7 +46,7 @@ const BookDetails = () => {
 	}, [reviewState]);
 
 	const createMarkup = () => {
-		return { __html: sortDescription };
+		return { __html: book[0]?.sortDescription };
 	};
 
 	const generationDate = (datetimeString) => {
@@ -73,7 +66,7 @@ const BookDetails = () => {
 					<button
 						type="button"
 						className="flex flex-c back-btn"
-						onClick={() => navigate('/home')}
+						onClick={() => navigate('/')}
 					>
 						<FaArrowLeft size={22} />
 						<span className="fs-18 fw-6">Go Back</span>
@@ -81,26 +74,26 @@ const BookDetails = () => {
 
 					<div className="book-details-content grid ">
 						<div className="book-details-img">
-							<img src={images} alt="cover img" />
+							<img src={book[0]?.images} alt="cover img" />
 						</div>
 						<div className="book-details-info">
 							<div className="book-details-item title">
-								<span className="fw-6 fs-24">{nameProduct}</span>
+								<span className="fw-6 fs-24">{book[0]?.nameProduct}</span>
 							</div>
 							<div className="book-details-item description">
 								<div dangerouslySetInnerHTML={createMarkup()} />
 							</div>
 							<div className="book-details-item">
 								<span className="fw-6">Author: </span>
-								<span className="text-italic">{authorProduct}</span>
+								<span className="text-italic">{book[0]?.authorProduct}</span>
 							</div>
 							<div className="book-details-item">
 								<span className="fw-6">Publish year: </span>
-								<span className="text-italic">{year}</span>
+								<span className="text-italic">{book[0]?.year}</span>
 							</div>
 							<div className="book-details-item">
-								<span className="fw-6">Isbn: </span>
-								<span>{isbn}</span>
+								<span className="fw-6">Isbn:</span>
+								<span> {book[0]?.isbn}</span>
 							</div>
 						</div>
 					</div>
@@ -110,7 +103,7 @@ const BookDetails = () => {
 							<span className="fw-6 fs-24">Mô tả</span>
 						</div>
 						<div className="col-lg-12 description-text">
-							<SeeMore text={description} />
+							<SeeMore text={book[0]?.description} />
 						</div>
 					</div>
 
@@ -144,7 +137,7 @@ const BookDetails = () => {
 									<FormReview
 										show={show}
 										onHide={handleClose}
-										title={nameProduct}
+										title={''}
 										idProduct={id}
 									/>
 								</div>

@@ -9,10 +9,10 @@ import './Navbar.css';
 const Navbar = () => {
 	const [toggleMenu, setToggleMenu] = useState(false);
 	const handleNavbar = () => setToggleMenu(!toggleMenu);
-	const user = useSelector((state) => state.auth.login.currentUser);
+	const user = JSON.parse(localStorage.getItem('user'));
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	console.log('user', user);
+
 	const handleLogout = () => {
 		console.log('click');
 		logOut(dispatch, navigate);
@@ -22,7 +22,7 @@ const Navbar = () => {
 		<nav className="navbar" id="navbar">
 			<div className="container navbar-content flex flex-nowrap">
 				<div className="brand-and-toggler flex flex-sb">
-					<Link to="/home" className="navbar-brand flex">
+					<Link to="/" className="navbar-brand flex">
 						<img src={logoImg} alt="site logo" />
 						<span className="text-uppercase fw-7 fs-24 ls-1">bookpoly</span>
 					</Link>
@@ -66,7 +66,7 @@ const Navbar = () => {
 							<>
 								<li className="nav-item">
 									<Link
-										to="signin"
+										to={user.isAdmin ? '/Admin' : ''}
 										className="nav-link text-uppercase  fs-22 fw-6 ls-1"
 									>
 										{user.username}

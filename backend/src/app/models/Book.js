@@ -48,8 +48,19 @@ const Book = {
 		}
 	},
 
-	selectAll: async () => {
-		const sql = `SELECT * FROM books`;
+	selectAll: async (limit, offset) => {
+		const sql = `SELECT * FROM books limit ? offset ?`;
+
+		try {
+			const results = await executeQuery(sql, [+limit, +offset]);
+			return results;
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	countTotal: async () => {
+		const sql = `SELECT count(*) as count FROM books `;
 
 		try {
 			const results = await executeQuery(sql);
@@ -61,7 +72,16 @@ const Book = {
 
 	selectOne: async (id) => {
 		const sql = `SELECT * FROM books WHERE idProduct = ?`;
+		try {
+			const results = await executeQuery(sql, [id]);
+			return results;
+		} catch (error) {
+			throw error;
+		}
+	},
 
+	selectByNameCategory: async (id) => {
+		const sql = `SELECT * FROM books WHERE idCategory = ?`;
 		try {
 			const results = await executeQuery(sql, [id]);
 			return results;
@@ -138,11 +158,23 @@ const Book = {
 			throw error;
 		}
 	},
+
 	updateView: async (id) => {
 		console.log('update view');
 		const sql = `UPDATE books SET view = view + 1 WHERE idProduct = ?`;
 		try {
 			await executeQuery(sql, [+id]);
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	isbnExists: async (isbn) => {
+		const sql = `SELECT COUNT(*) AS count FROM books WHERE isbn = ?`;
+		try {
+			const result = await executeQuery(sql, [isbn]);
+			// Kiểm tra nếu có ít nhất một cuốn sách có số ISBN trùng
+			return result[0].count > 0;
 		} catch (error) {
 			throw error;
 		}

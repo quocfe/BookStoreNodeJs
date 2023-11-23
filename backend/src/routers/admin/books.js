@@ -3,6 +3,8 @@ import bookController from '../../app/controllers/bookController.js';
 
 const router = express.Router();
 
+// Get isbn
+router.get('/isbnExists', bookController.isbnExists);
 // Update book
 router.put('/update/:id', bookController.update);
 // Edit

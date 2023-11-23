@@ -18,7 +18,7 @@ const persistConfig = {
 	key: 'root',
 	version: 1,
 	storage,
-	blacklist: ['auth'],
+	blacklist: ['auth', 'books'],
 };
 const rootReducer = combineReducers({
 	books: bookReducer,

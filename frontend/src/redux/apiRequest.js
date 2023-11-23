@@ -12,15 +12,15 @@ import {
 	registerStart,
 	registerSuccess,
 } from './authSlice';
-import { searchBook as searchFetch } from './bookSlice';
+import { searchBook as searchFetch, setSearchStatus } from './bookSlice';
 
 const loginUser = async (user, dispatch, navigate) => {
 	dispatch(loginStart());
 	try {
 		const response = await authApi.login(user);
 
-		const { accessToken, refreshToken } = response.data.user;
-		const { username, password } = response.data.user;
+		const { accessToken, refreshToken, username, password, isAdmin } =
+			response.data.user;
 		const newUser = {
 			username,
 			password,
@@ -28,7 +28,12 @@ const loginUser = async (user, dispatch, navigate) => {
 		dispatch(loginSuccess(newUser));
 		localStorage.setItem('accessToken', accessToken);
 		localStorage.setItem('refreshToken', refreshToken);
-		navigate('/');
+		localStorage.setItem('user', JSON.stringify(response.data.user));
+		if (isAdmin == 'true') {
+			navigate('/admin');
+		} else {
+			navigate('/');
+		}
 	} catch (error) {
 		dispatch(loginFail());
 	}
@@ -52,6 +57,8 @@ const logOut = async (dispatch, navigate) => {
 		dispatch(logoutSuccess());
 		localStorage.removeItem('accessToken');
 		localStorage.removeItem('refreshToken');
+		localStorage.removeItem('user');
+
 		navigate('/signin');
 	} catch (error) {
 		dispatch(logoutFail());
@@ -62,18 +69,21 @@ const searchBook = async (query, dispatch, navigate) => {
 	try {
 		const response = await booksApi.search(query);
 		dispatch(searchFetch(response.data));
-		navigate('/home');
+		navigate('/');
 	} catch (error) {
 		console.log(error);
 	}
 };
 const fetchBook = async (query, dispatch, navigate) => {
 	try {
-		const response = await booksApi.getAll(query);
+		dispatch(setSearchStatus('loading'));
+		const response = await booksApi.getAll();
 		dispatch(getAllBook(response.data));
 		navigate('/book');
+		dispatch(setSearchStatus('succeeded'));
 	} catch (error) {
 		console.log(error);
+		dispatch(setSearchStatus('failed'));
 	}
 };
 

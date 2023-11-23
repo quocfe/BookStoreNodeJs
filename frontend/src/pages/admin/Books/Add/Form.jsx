@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Button from 'react-bootstrap/esm/Button';
+import categoryAdminApi from '../../../../api/admin/category';
 
 const AddForm = ({ handleAddButtonClick }) => {
+	const [categories, setCategories] = useState([]);
 	const [formData, setFormData] = useState({
 		nameProduct: '',
 		authorProduct: '',
@@ -29,6 +31,19 @@ const AddForm = ({ handleAddButtonClick }) => {
 			images: event.target.files[0],
 		}));
 	};
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await categoryAdminApi.getAll();
+				setCategories(response.data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		fetchData();
+	}, []);
 
 	return (
 		<form encType="multipart/form-data">
@@ -134,9 +149,11 @@ const AddForm = ({ handleAddButtonClick }) => {
 				value={formData.idCategory}
 				onChange={handleChange}
 			>
-				<option defaultValue>Category</option>
-				<option value="1">Trẻ em</option>
-				<option value="2">Tâm lý</option>
+				{categories?.map((category) => (
+					<option key={category.idCategory} value={category.idCategory}>
+						{category.nameCategory}
+					</option>
+				))}
 			</select>
 
 			<Button

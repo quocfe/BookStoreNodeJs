@@ -4,6 +4,8 @@ import bookController from '../app/controllers/bookController.js';
 const router = express.Router();
 
 // router.get('/:isbn', (req, res) => {});
+
+router.get('/category/:id', bookController.selectByNameCate);
 // Search book
 router.get('/search', bookController.search);
 // Update book

@@ -23,7 +23,8 @@ const FormReview = ({ show, onHide, title, idProduct }) => {
 	};
 
 	const handleSubmit = async () => {
-		const newData = { ...formData, idUser: 1, idProduct: +idProduct };
+		const user = JSON.parse(localStorage.getItem('user'));
+		const newData = { ...formData, idUser: user.idUser, idProduct: idProduct };
 		try {
 			await reviewApi.insert(newData);
 			const response = await reviewApi.getAll();

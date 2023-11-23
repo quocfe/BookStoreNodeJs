@@ -7,6 +7,7 @@ import { engine } from 'express-handlebars';
 import cors from 'cors';
 import morgan from 'morgan';
 import connection from './config/connect.js';
+import bodyParser from 'body-parser';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // template engine

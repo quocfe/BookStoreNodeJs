@@ -13,10 +13,10 @@ const SeeMore = ({ text }) => {
 		<div>
 			<div
 				dangerouslySetInnerHTML={{
-					__html: showMore ? text : `${text.slice(0, 500)}...`,
+					__html: showMore ? text : `${text?.slice(0, 500)}...`,
 				}}
 			/>
-			{text.length > 200 && (
+			{text?.length > 200 && (
 				<Button
 					className="btn-seemore mt-2"
 					variant="link"

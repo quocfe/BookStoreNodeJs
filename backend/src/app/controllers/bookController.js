@@ -3,8 +3,20 @@ import Book from '../models/Book.js';
 const bookController = {
 	index: async (req, res) => {
 		try {
-			const books = await Book.selectAll();
-			res.status(200).json(books);
+			const { page, limit } = req.query;
+			const offset = (page - 1) * limit;
+
+			const books = await Book.selectAll(limit, offset);
+			const [totaPageData] = await Book.countTotal();
+			const totalPage = Math.ceil(+totaPageData?.count / limit);
+			res.status(200).json({
+				data: books,
+				pagination: {
+					page: +page,
+					limit: +limit,
+					totalPage,
+				},
+			});
 		} catch (error) {
 			res.status(500).json(error);
 		}
@@ -84,6 +96,24 @@ const bookController = {
 		try {
 			const result = await Book.search(searchQuery);
 			res.status(200).json(result);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
+	isbnExists: async (req, res) => {
+		try {
+			const result = await Book.isbnExists(req.body.isbn);
+			res.status(200).json(result);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
+	selectByNameCate: async (req, res) => {
+		try {
+			const id = req.params.id;
+
+			const books = await Book.selectByNameCategory(id);
+			res.status(200).json(books);
 		} catch (error) {
 			res.status(500).json(error);
 		}

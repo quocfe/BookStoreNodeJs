@@ -5,12 +5,16 @@ const booksApi = {
 		const url = 'book/add';
 		return axiosClient.post(url, data);
 	},
-	getAll() {
-		const url = `book`;
+	getAll(page, limit) {
+		const url = `book/?page=${page}&limit=${limit}`;
 		return axiosClient.get(url);
 	},
 	getOne(id) {
 		const url = `book/${id}`;
+		return axiosClient.get(url);
+	},
+	getByNameCate(id) {
+		const url = `book/category/${id}`;
 		return axiosClient.get(url);
 	},
 	search(query) {

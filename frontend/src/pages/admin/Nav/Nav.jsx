@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Nav = () => {
 	return (
 		<div className="nav">
-			<a href="/">PolyBook</a>
+			<Link to="/">PolyBook</Link>
 			<ul>
 				<li>
 					<Link to="/admin">DashBoard</Link>

@@ -34,6 +34,7 @@ axiosClient.interceptors.response.use(
 
 			const refreshToken = localStorage.getItem('refreshToken');
 			if (refreshToken) {
+				console.log('refresh token', refreshToken);
 				const dataRefreshToken = {
 					refreshToken: refreshToken,
 				};
