@@ -6,7 +6,7 @@ const booksAdminApi = {
 		return axiosAdmin.post(url, data);
 	},
 	getAll() {
-		const url = `/book`;
+		const url = `book/?page=1&limit=100`;
 		return axiosAdmin.get(url);
 	},
 	getOne(id) {

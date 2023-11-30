@@ -9,11 +9,21 @@ const SeeMore = ({ text }) => {
 		setShowMore(!showMore);
 	};
 
+	const refactorHtml = (text) => {
+		if (showMore) {
+			return text;
+		} else if (text?.length < 200) {
+			return text;
+		} else {
+			return `${text?.slice(0, 500)}...`;
+		}
+	};
+
 	return (
-		<div>
+		<>
 			<div
 				dangerouslySetInnerHTML={{
-					__html: showMore ? text : `${text?.slice(0, 500)}...`,
+					__html: refactorHtml(text),
 				}}
 			/>
 			{text?.length > 200 && (
@@ -25,7 +35,7 @@ const SeeMore = ({ text }) => {
 					{showMore ? 'Ẩn bớt' : 'Xem thêm'}
 				</Button>
 			)}
-		</div>
+		</>
 	);
 };
 

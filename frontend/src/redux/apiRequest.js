@@ -28,7 +28,11 @@ const loginUser = async (user, dispatch, navigate) => {
 		dispatch(loginSuccess(newUser));
 		localStorage.setItem('accessToken', accessToken);
 		localStorage.setItem('refreshToken', refreshToken);
-		localStorage.setItem('user', JSON.stringify(response.data.user));
+		const dataUser = {
+			id: response.data.user.idUser,
+			username: response.data.user.username,
+		};
+		localStorage.setItem('user', JSON.stringify(dataUser));
 		if (isAdmin == 'true') {
 			navigate('/admin');
 		} else {

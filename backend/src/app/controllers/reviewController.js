@@ -9,11 +9,20 @@ const reviewController = {
 			res.status(500).json(error);
 		}
 	},
+	selectOne: async (req, res) => {
+		const id = req.params.id;
+		try {
+			await Review.updateView(id);
+			const reviews = await Review.selectOne(id);
+			res.status(200).json(reviews);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
 	add: async (req, res) => {
 		try {
 			const newReview = {
 				content: req.body.content,
-				rating: req.body.rating,
 				idProduct: req.body.idProduct,
 				idUser: req.body.idUser,
 			};

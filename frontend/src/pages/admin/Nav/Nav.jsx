@@ -26,6 +26,13 @@ const Nav = () => {
 					</Link>
 				</li>
 			</ul>
+			<ul lass="accordion accordion-flush" id="accordionReview">
+				<li className="accordionItem">
+					<Link to="/admin/review" className="accordion-header" type="button">
+						Review
+					</Link>
+				</li>
+			</ul>
 			<ul lass="accordion accordion-flush" id="accordionFlushMember">
 				<li className="accordionItem">
 					<a

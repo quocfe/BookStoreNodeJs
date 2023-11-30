@@ -25,11 +25,19 @@ const FormReview = ({ show, onHide, title, idProduct }) => {
 	const handleSubmit = async () => {
 		const user = JSON.parse(localStorage.getItem('user'));
 		const newData = { ...formData, idUser: user.idUser, idProduct: idProduct };
+		const newDataRedux = {
+			...formData,
+			idUser: user.idUser,
+			idProduct: idProduct,
+			username: user.username,
+		};
 		try {
 			await reviewApi.insert(newData);
-			const response = await reviewApi.getAll();
+			// const response = await reviewApi.getAll();
+			const response = await reviewApi.selectByProduct(idProduct);
 			dispatch(setReviews(response.data));
 			alert('Đăng review thành công');
+			// console.log('selectByProduct', selectByProduct.data);
 			onHide();
 			setFormData({
 				content: '',

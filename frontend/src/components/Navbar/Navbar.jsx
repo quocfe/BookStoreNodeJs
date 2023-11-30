@@ -47,19 +47,16 @@ const Navbar = () => {
 				>
 					<ul className="navbar-nav">
 						<li className="nav-item">
-							<Link
-								to="book"
-								className="nav-link text-uppercase  fs-22 fw-6 ls-1"
-							>
+							<Link to="/" className="nav-link text-uppercase  fs-22 fw-6 ls-1">
 								Home
 							</Link>
 						</li>
 						<li className="nav-item">
 							<Link
-								to="about"
+								to="/review"
 								className="nav-link text-uppercase  fs-22 fw-6 ls-1"
 							>
-								about
+								Review
 							</Link>
 						</li>
 						{user ? (

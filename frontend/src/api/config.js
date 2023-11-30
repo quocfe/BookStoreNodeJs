@@ -34,13 +34,12 @@ axiosClient.interceptors.response.use(
 
 			const refreshToken = localStorage.getItem('refreshToken');
 			if (refreshToken) {
-				console.log('refresh token', refreshToken);
 				const dataRefreshToken = {
 					refreshToken: refreshToken,
 				};
+
 				try {
 					const refreshResponse = await authApi.refreshToken(dataRefreshToken);
-
 					const newAccessToken = refreshResponse.data.accessToken;
 					const refreshToken = refreshResponse.data.refreshToken;
 					localStorage.setItem('accessToken', newAccessToken);
@@ -48,11 +47,8 @@ axiosClient.interceptors.response.use(
 
 					originalRequest.headers.token = 'Bearer ' + newAccessToken;
 					return axios(originalRequest);
-				} catch (refreshError) {
-					console.error(
-						'Refresh token error:',
-						refreshError.response.data.error
-					);
+				} catch (error) {
+					console.error('Refresh token error:', error.response.data);
 				}
 			}
 		}

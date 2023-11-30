@@ -7,8 +7,8 @@ import { Toastify } from '../../../../components/Toast/Toast';
 import Layout from '../../Layout/Layout';
 import Add from '../Add/Add';
 import Update from '../Update/Update';
-import booksApi from './../../../../api/client/books';
 import './View.css';
+import { orderBy } from 'lodash';
 
 const View = () => {
 	const [books, setBooks] = useState([]);
@@ -38,9 +38,14 @@ const View = () => {
 	useEffect(() => {
 		async function fetchData() {
 			try {
-				const response = await booksApi.getAll();
+				const response = await booksAdminApi.getAll();
 				if (response.status === 200) {
-					setBooks(response.data);
+					const sortedBooks = orderBy(
+						response.data.data,
+						['idProduct'],
+						['desc']
+					);
+					setBooks(sortedBooks);
 				}
 			} catch (error) {
 				console.log(error);

@@ -88,11 +88,14 @@ const authController = {
 		if (!refreshTokens.includes(refreshToken)) {
 			return res.status(403).json('Refresh token is not valid');
 		}
+		console.log('refreshTokensArr', refreshTokens);
+		console.log('refreshToken request', refreshToken);
 		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
 			if (err) res.sendStatus(403);
 			refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
 			const newAccessToken = authController.generateAccessToken(data);
 			const newRefreshToken = authController.generateRefreshToken(data);
+			console.log('newRefreshToken', newRefreshToken);
 			refreshTokens.push(newRefreshToken);
 
 			res.status(200).json({

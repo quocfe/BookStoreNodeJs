@@ -14,11 +14,11 @@ const executeQuery = (sql, values) => {
 
 const Review = {
 	insert: async (data) => {
-		const { content, rating, idProduct, idUser } = data;
+		const { content, idProduct, idUser } = data;
 
-		const sql = `INSERT INTO review (content, rating, idProduct, idUser) VALUES (?, ?, ?, ?)`;
+		const sql = `INSERT INTO review (content, idProduct, idUser) VALUES (?, ?, ?)`;
 
-		const values = [content, rating, idProduct, idUser];
+		const values = [content, idProduct, idUser];
 
 		try {
 			const results = await executeQuery(sql, values);
@@ -76,9 +76,10 @@ const Review = {
 			throw error;
 		}
 	},
+
 	selectReviewWithProduct: async (idProduct) => {
 		const sql =
-			'SELECT review.*, books.nameProduct, users.username FROM review JOIN books ON review.idProduct = books.idProduct JOIN users ON review.idUser = users.idUser  WHERE books.idProduct = ?';
+			'SELECT review.*, books.nameProduct, users.username, books.images, books.sortDescription FROM review JOIN books ON review.idProduct = books.idProduct JOIN users ON review.idUser = users.idUser  WHERE books.idProduct = ?';
 
 		try {
 			const results = await executeQuery(sql, [idProduct]);
@@ -87,10 +88,8 @@ const Review = {
 			throw error;
 		}
 	},
-	//todo chổ này sai
 	updateView: async (id) => {
-		console.log('update view');
-		const sql = `UPDATE books SET view = view + 1 WHERE idProduct = ?`;
+		const sql = `UPDATE review SET view = view + 1 WHERE idReview = ?`;
 		try {
 			await executeQuery(sql, [+id]);
 		} catch (error) {
