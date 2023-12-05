@@ -3,7 +3,7 @@ import { FaStar } from 'react-icons/fa';
 import './StarRating.css';
 
 const StarRating = ({ onRatingChange }) => {
-	const [rating, setRating] = useState(0);
+	const [rating, setRating] = useState(1);
 	const [hover, setHover] = useState(0);
 
 	const handleMouseOver = (index) => {

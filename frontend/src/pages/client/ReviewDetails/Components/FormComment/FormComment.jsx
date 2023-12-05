@@ -10,7 +10,7 @@ import { setComments } from '../../../../../redux/commentSlice';
 const FormComment = () => {
 	const [comment, setComment] = useState({
 		content: '',
-		rating: 0,
+		rating: 1,
 		idUser: 0,
 		idReview: 0,
 		idProduct: 0,
@@ -35,7 +35,7 @@ const FormComment = () => {
 		fetchData();
 	}, []);
 
-	const onRatingChange = (data) => {
+	const onRatingChange = (data = 1) => {
 		setComment((prev) => ({
 			...prev,
 			rating: data,
@@ -50,6 +50,7 @@ const FormComment = () => {
 			setComment({
 				content: '',
 			});
+			onRatingChange(0);
 		} catch (error) {
 			console.log(error);
 		}

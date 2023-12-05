@@ -13,6 +13,10 @@ const commentsApi = {
 		const url = `comment/${id}`;
 		return axiosClient.get(url);
 	},
+	getAllByIdProduct(id) {
+		const url = `comment/product/${id}`;
+		return axiosClient.get(url);
+	},
 	search(query) {
 		const url = `comment/search?q=${query}`;
 		return axiosClient.get(url);

@@ -76,6 +76,16 @@ const Comment = {
 			throw error;
 		}
 	},
+	selectByIdProduct: async (id) => {
+		const sql = `SELECT comments.*, users.username FROM comments JOIN users ON comments.idUser = users.idUser WHERE idProduct = ?`;
+
+		try {
+			const results = await executeQuery(sql, [id]);
+			return results;
+		} catch (error) {
+			throw error;
+		}
+	},
 };
 
 export default Comment;

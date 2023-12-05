@@ -3,8 +3,8 @@ import Comment from './../models/Comment.js';
 const commentController = {
 	getAll: async (req, res) => {
 		try {
-			const categorys = await Comment.selectAll();
-			res.status(200).json(categorys);
+			const comments = await Comment.selectAll();
+			res.status(200).json(comments);
 		} catch (error) {
 			res.status(500).json(error);
 		}
@@ -56,6 +56,15 @@ const commentController = {
 
 			await Category.update(idCmt, newComment);
 			res.status(200).json('update success');
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
+	selectByIdProduct: async (req, res) => {
+		try {
+			const idPdt = req.params.id;
+			const comments = await Comment.selectByIdProduct(idPdt);
+			res.status(200).json(comments);
 		} catch (error) {
 			res.status(500).json(error);
 		}

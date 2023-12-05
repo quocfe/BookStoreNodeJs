@@ -6,6 +6,7 @@ import './ReviewDetails.css';
 import StarRating from './../../../components/StarRating/StarRating';
 import Comments from './Components/Comments/Comments';
 import FormComment from './Components/FormComment/FormComment';
+import RatingAverage from './Components/RatingAverage/RatingAverage';
 
 const ReviewDetails = () => {
 	const { id } = useParams();
@@ -67,8 +68,9 @@ const ReviewDetails = () => {
 									Bình luận/Đánh giá <strong>({totalComments})</strong>
 								</span>
 							</div>
-							<Comments totalComments={setTotalComments} />
+							<RatingAverage idReview={id} />
 							<FormComment />
+							<Comments totalComments={setTotalComments} idReview={id} />
 						</div>
 					</div>
 				</div>

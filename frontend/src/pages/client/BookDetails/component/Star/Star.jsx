@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 
-const Star = ({ rating }) => {
+const Star = ({ rating, className }) => {
 	const totalStars = 5;
 
 	return (
-		<div className="mt-2">
+		<div className={className}>
 			{[...Array(totalStars)].map((_, index) => (
 				<FaStar
 					key={index}
