@@ -14,7 +14,6 @@ const Navbar = () => {
 	const navigate = useNavigate();
 
 	const handleLogout = () => {
-		console.log('click');
 		logOut(dispatch, navigate);
 	};
 
@@ -63,7 +62,7 @@ const Navbar = () => {
 							<>
 								<li className="nav-item">
 									<Link
-										to={user.isAdmin ? '/Admin' : ''}
+										to={user?.isAdmin ? '/admin' : ''}
 										className="nav-link text-uppercase  fs-22 fw-6 ls-1"
 									>
 										{user.username}

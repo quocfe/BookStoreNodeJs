@@ -7,6 +7,7 @@ import bookRoutes from './books.js';
 import cateRoutes from './category.js';
 import reviewRoutes from './review.js';
 import userRoutes from './user.js';
+import commentRoutes from './comments.js';
 
 function routes(app) {
 	// admin routes
@@ -17,6 +18,7 @@ function routes(app) {
 	// client routes
 	app.use('/v1/api/auth', authRoutes);
 	app.use('/v1/api/user', userRoutes);
+	app.use('/v1/api/comment', commentRoutes);
 	app.use('/v1/api/review', authenticateToken, reviewRoutes);
 	app.use('/v1/api/category', authenticateToken, cateRoutes);
 	app.use('/v1/api/book', authenticateToken, bookRoutes);

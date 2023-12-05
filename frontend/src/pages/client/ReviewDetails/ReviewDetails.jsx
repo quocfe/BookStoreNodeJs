@@ -3,10 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import Navbar from '../../../components/Navbar/Navbar';
 import reviewApi from '../../../api/client/review';
 import './ReviewDetails.css';
+import StarRating from './../../../components/StarRating/StarRating';
+import Comments from './Components/Comments/Comments';
+import FormComment from './Components/FormComment/FormComment';
 
 const ReviewDetails = () => {
 	const { id } = useParams();
 	const [review, setReview] = useState({});
+	const [totalComments, setTotalComments] = useState(0);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -53,6 +57,19 @@ const ReviewDetails = () => {
 				<div className="row ">
 					<div className="col-lg-12">
 						<div dangerouslySetInnerHTML={createMarkup(review.content)}></div>
+					</div>
+				</div>
+				<div className="row mb-5">
+					<div className="col-lg-12">
+						<div className=" shadow px-5 py-3 mb-5 bg-body rounded">
+							<div className="title mb-3">
+								<span className="fw-6 fs-24">
+									Bình luận/Đánh giá <strong>({totalComments})</strong>
+								</span>
+							</div>
+							<Comments totalComments={setTotalComments} />
+							<FormComment />
+						</div>
 					</div>
 				</div>
 			</div>

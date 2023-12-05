@@ -31,6 +31,7 @@ const loginUser = async (user, dispatch, navigate) => {
 		const dataUser = {
 			id: response.data.user.idUser,
 			username: response.data.user.username,
+			isAdmin: response.data.user.isAdmin,
 		};
 		localStorage.setItem('user', JSON.stringify(dataUser));
 		if (isAdmin == 'true') {
@@ -78,6 +79,7 @@ const searchBook = async (query, dispatch, navigate) => {
 		console.log(error);
 	}
 };
+
 const fetchBook = async (query, dispatch, navigate) => {
 	try {
 		dispatch(setSearchStatus('loading'));

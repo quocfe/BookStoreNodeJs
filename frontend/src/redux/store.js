@@ -13,17 +13,19 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import reviewSlice from './reviewSlice';
+import commentSlice from './commentSlice';
 
 const persistConfig = {
 	key: 'root',
 	version: 1,
 	storage,
-	blacklist: ['auth', 'books'],
+	blacklist: ['auth', 'books', 'comment'],
 };
 const rootReducer = combineReducers({
 	books: bookReducer,
 	auth: authSlice,
 	review: reviewSlice,
+	comment: commentSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

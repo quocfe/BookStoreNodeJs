@@ -5,8 +5,8 @@ const reviewApi = {
 		const url = 'review/add';
 		return axiosClient.post(url, data);
 	},
-	getAll() {
-		const url = `review`;
+	getAll(page, limit) {
+		const url = `review?page=${page}&limit=${limit}`;
 		return axiosClient.get(url);
 	},
 	getOne(id) {

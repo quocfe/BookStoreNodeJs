@@ -3,8 +3,22 @@ import Review from '../models/Review.js';
 const reviewController = {
 	index: async (req, res) => {
 		try {
-			const reviews = await Review.selectAll();
-			res.status(200).json(reviews);
+			const { page, limit } = req.query;
+			const offset = (page - 1) * limit;
+
+			const reviews = await Review.selectAll(limit, offset);
+			const [totaPageData] = await Review.countTotal();
+			console.log('totaPageData', totaPageData);
+			const totalPage = Math.ceil(+totaPageData?.count / limit);
+
+			res.status(200).json({
+				data: reviews,
+				pagination: {
+					page: +page,
+					limit: +limit,
+					totalPage,
+				},
+			});
 		} catch (error) {
 			res.status(500).json(error);
 		}

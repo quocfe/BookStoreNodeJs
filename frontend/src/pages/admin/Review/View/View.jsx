@@ -26,9 +26,13 @@ const ViewReview = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await reviewAdminApi.getAll();
+			const response = await reviewAdminApi.getAll(1, 100);
 			if (response.status === 200) {
-				const sortedReviews = orderBy(response.data, ['createAt'], ['desc']);
+				const sortedReviews = orderBy(
+					response.data.data,
+					['createAt'],
+					['desc']
+				);
 				setReviews(sortedReviews);
 			}
 		};

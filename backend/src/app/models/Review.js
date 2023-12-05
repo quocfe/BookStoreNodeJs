@@ -28,11 +28,11 @@ const Review = {
 		}
 	},
 
-	selectAll: async () => {
-		const sql = `SELECT * FROM review`;
+	selectAll: async (limit, offset) => {
+		const sql = `SELECT * FROM review limit ? offset ?`;
 
 		try {
-			const results = await executeQuery(sql);
+			const results = await executeQuery(sql, [+limit, +offset]);
 			return results;
 		} catch (error) {
 			throw error;
@@ -92,6 +92,16 @@ const Review = {
 		const sql = `UPDATE review SET view = view + 1 WHERE idReview = ?`;
 		try {
 			await executeQuery(sql, [+id]);
+		} catch (error) {
+			throw error;
+		}
+	},
+	countTotal: async () => {
+		const sql = `SELECT count(*) as count FROM review `;
+
+		try {
+			const results = await executeQuery(sql);
+			return results;
 		} catch (error) {
 			throw error;
 		}

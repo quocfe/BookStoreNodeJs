@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import booksApi from '../../../api/client/books';
 import Header from './../../../components/Header/Header';
 import SeeMore from './../../../components/SeeMore/SeeMore';
@@ -76,6 +76,9 @@ const BookDetails = () => {
 								<span className="fw-6">Isbn:</span>
 								<span> {book[0]?.isbn}</span>
 							</div>
+							<Link to="/review" className="btn btn-primary btnShowReview">
+								Xem review
+							</Link>
 						</div>
 					</div>
 
