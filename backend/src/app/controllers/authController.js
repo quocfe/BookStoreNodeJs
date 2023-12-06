@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-let refreshTokens = [];
+let userArr = [];
 
 const authController = {
 	// REGISTER
@@ -26,9 +26,8 @@ const authController = {
 	},
 	// GENERATEACCESSTOKEN
 	generateAccessToken: (user) => {
-		console.log('user token', user);
 		return jwt.sign(
-			{ id: user.id, isAdmin: user.isAdmin },
+			{ id: user.idUser, isAdmin: user.isAdmin },
 			process.env.ACCESS_TOKEN_SECRET,
 			{
 				expiresIn: '30s',
@@ -43,10 +42,9 @@ const authController = {
 				isAdmin: user.isAdmin,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
-			{ expiresIn: '30d' }
+			{ expiresIn: '30s' }
 		);
 	},
-
 	// LOGIN
 	login: async (req, res, next) => {
 		try {
@@ -69,9 +67,9 @@ const authController = {
 			const accessToken = authController.generateAccessToken(user[0]);
 			const refreshToken = authController.generateRefreshToken(user[0]);
 
-			refreshTokens.push(refreshToken);
+			await User.updateRefeshToken(refreshToken, user[0].idUser);
 
-			const newUser = { ...user[0], accessToken, refreshToken };
+			const newUser = { ...user[0], accessToken };
 
 			return res.json({ user: newUser });
 			//
@@ -83,31 +81,24 @@ const authController = {
 	requestRefreshToken: async (req, res) => {
 		//Take refresh token from user
 		const refreshToken = req.body.refreshToken;
+		const idUser = req.body.idUser;
 		//Send error if token is not valid
 		if (!refreshToken) return res.status(401).json("You're not authenticated");
-		if (!refreshTokens.includes(refreshToken)) {
+		const user = await User.selectOne({ idUser: idUser });
+		userArr.push(user[0]);
+		if (user[0].refreshToken != refreshToken) {
 			return res.status(403).json('Refresh token is not valid');
 		}
 
-		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
-			if (err) res.sendStatus(403);
-			refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-			const newAccessToken = authController.generateAccessToken(data);
-			const newRefreshToken = authController.generateRefreshToken(data);
+		const newAccessToken = authController.generateAccessToken(user[0]);
 
-			refreshTokens.push(newRefreshToken);
-
-			res.status(200).json({
-				accessToken: newAccessToken,
-				refreshToken: newRefreshToken,
-			});
+		res.status(200).json({
+			accessToken: newAccessToken,
 		});
 	},
 	//LOG OUT
 	logOut: async (req, res) => {
-		refreshTokens = refreshTokens.filter(
-			(token) => token !== req.headers.token
-		);
+		await User.updateRefeshToken(userArr.idUser, null);
 		res.status(200).json('Logged out successfully!');
 	},
 };

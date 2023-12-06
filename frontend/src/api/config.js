@@ -1,5 +1,6 @@
 import axios from 'axios';
 import authApi from './client/auth';
+import userApi from './client/user';
 
 const axiosClient = axios.create({
 	baseURL: 'http://localhost:3000/v1/api/',
@@ -32,18 +33,20 @@ axiosClient.interceptors.response.use(
 		if (error.response.status === 403 && !originalRequest._retry) {
 			originalRequest._retry = true;
 
-			const refreshToken = localStorage.getItem('refreshToken');
+			const user = JSON.parse(localStorage.getItem('user'));
+			const { data } = await userApi.getUser(user.id);
+			const refreshToken = data[0].refreshToken;
+			const idUser = data[0].idUser;
 			if (refreshToken) {
 				const dataRefreshToken = {
 					refreshToken: refreshToken,
+					idUser: idUser,
 				};
 
 				try {
 					const refreshResponse = await authApi.refreshToken(dataRefreshToken);
 					const newAccessToken = refreshResponse.data.accessToken;
-					const refreshToken = refreshResponse.data.refreshToken;
 					localStorage.setItem('accessToken', newAccessToken);
-					localStorage.setItem('refreshToken', refreshToken);
 
 					originalRequest.headers.token = 'Bearer ' + newAccessToken;
 					return axios(originalRequest);

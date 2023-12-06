@@ -19,15 +19,13 @@ const loginUser = async (user, dispatch, navigate) => {
 	try {
 		const response = await authApi.login(user);
 
-		const { accessToken, refreshToken, username, password, isAdmin } =
-			response.data.user;
+		const { accessToken, username, password, isAdmin } = response.data.user;
 		const newUser = {
 			username,
 			password,
 		};
 		dispatch(loginSuccess(newUser));
 		localStorage.setItem('accessToken', accessToken);
-		localStorage.setItem('refreshToken', refreshToken);
 		const dataUser = {
 			id: response.data.user.idUser,
 			username: response.data.user.username,
@@ -61,7 +59,6 @@ const logOut = async (dispatch, navigate) => {
 		await authApi.logout();
 		dispatch(logoutSuccess());
 		localStorage.removeItem('accessToken');
-		localStorage.removeItem('refreshToken');
 		localStorage.removeItem('user');
 
 		navigate('/signin');

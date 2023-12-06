@@ -37,8 +37,6 @@ const BookDetails = () => {
 		return { __html: book[0]?.sortDescription };
 	};
 
-	console.log(bookType);
-
 	return (
 		<>
 			<Header />

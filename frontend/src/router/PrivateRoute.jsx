@@ -3,7 +3,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoute = () => {
 	const isAuthenticated = !!localStorage.getItem('accessToken');
-	console.log(isAuthenticated);
 	return isAuthenticated ? <Outlet /> : <Navigate to="/signin" />;
 };
 

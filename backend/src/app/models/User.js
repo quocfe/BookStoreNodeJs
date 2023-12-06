@@ -26,7 +26,17 @@ const User = {
 			throw error;
 		}
 	},
+	updateRefeshToken: async (refreshToken, id) => {
+		const sql = 'UPDATE users SET	refreshToken = ? WHERE idUser = ?';
+		const values = [refreshToken, id];
 
+		try {
+			const results = await executeQuery(sql, values);
+			return results;
+		} catch (error) {
+			throw error;
+		}
+	},
 	selectAll: async () => {
 		const sql = 'SELECT * FROM users';
 
@@ -37,7 +47,6 @@ const User = {
 			throw error;
 		}
 	},
-
 	selectOne: async (object) => {
 		try {
 			for (const key in object) {
