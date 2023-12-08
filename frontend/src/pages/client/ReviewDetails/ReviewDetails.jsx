@@ -7,6 +7,7 @@ import StarRating from './../../../components/StarRating/StarRating';
 import Comments from './Components/Comments/Comments';
 import FormComment from './Components/FormComment/FormComment';
 import RatingAverage from './Components/RatingAverage/RatingAverage';
+import GoToTopButton from './../../../components/GoToTopButton/GoToTopButton';
 
 const ReviewDetails = () => {
 	const { id } = useParams();
@@ -16,6 +17,7 @@ const ReviewDetails = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
+				await reviewApi.updateView(id);
 				const response = await reviewApi.getOne(id);
 				setReview(response.data[0]);
 			} catch (error) {
@@ -24,7 +26,7 @@ const ReviewDetails = () => {
 		};
 
 		fetchData();
-	}, []);
+	}, [id]);
 
 	const createMarkup = (text) => {
 		return { __html: text };
@@ -34,6 +36,7 @@ const ReviewDetails = () => {
 		<>
 			<Navbar />
 			<div className="container" id="reviewDetails">
+				<GoToTopButton />
 				<Link to="/review">
 					<button
 						type="button"
@@ -68,9 +71,13 @@ const ReviewDetails = () => {
 									Bình luận/Đánh giá <strong>({totalComments})</strong>
 								</span>
 							</div>
-							<RatingAverage idReview={id} />
-							<FormComment />
-							<Comments totalComments={setTotalComments} idReview={id} />
+							<RatingAverage idReview={id} totalComments={totalComments} />
+							<FormComment idProduct={review.idProduct} idReview={id} />
+							<Comments
+								totalComments={setTotalComments}
+								idReview={id}
+								idProduct={review.idProduct}
+							/>
 						</div>
 					</div>
 				</div>

@@ -1,33 +1,33 @@
-import { axiosClient } from '../config';
+import axiosRoute from '../config';
 
 const commentsApi = {
 	insert(data) {
 		const url = 'comment/add';
-		return axiosClient.post(url, data);
+		return axiosRoute.post(url, data);
 	},
 	getAll() {
 		const url = `comment`;
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 	getOne(id) {
 		const url = `comment/${id}`;
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 	getAllByIdProduct(id) {
 		const url = `comment/product/${id}`;
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 	search(query) {
 		const url = `comment/search?q=${query}`;
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 	update(id, data) {
 		const url = `comment/update/${id}`;
-		return axiosClient.put(url, data);
+		return axiosRoute.put(url, data);
 	},
 	delete(id) {
 		const url = `comment/${id}`;
-		return axiosClient.delete(url);
+		return axiosRoute.delete(url);
 	},
 };
 

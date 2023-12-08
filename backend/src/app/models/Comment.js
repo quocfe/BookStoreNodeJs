@@ -51,10 +51,10 @@ const Comment = {
 	},
 
 	delete: async (id) => {
-		const sql = `DELETE FROM comments WHERE idproducts = ?`;
-
+		const sql = `DELETE FROM comments WHERE idcomments = ?`;
+		console.log(id);
 		try {
-			const results = await executeQuery(sql, [id]);
+			const results = await executeQuery(sql, [+id]);
 			return results;
 		} catch (error) {
 			throw error;

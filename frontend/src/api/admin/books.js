@@ -1,34 +1,34 @@
-import { axiosAdmin } from '../config';
+import axiosRoute from './../config';
 
 const booksAdminApi = {
 	insert(data) {
-		const url = '/book/add';
-		return axiosAdmin.post(url, data);
+		const url = 'admin/book/add';
+		return axiosRoute.post(url, data);
 	},
 	getAll() {
-		const url = `book/?page=1&limit=100`;
-		return axiosAdmin.get(url);
+		const url = `admin/book/?page=1&limit=100`;
+		return axiosRoute.get(url);
 	},
 	getOne(id) {
-		const url = `/book/${id}`;
-		return axiosAdmin.get(url);
+		const url = `admin/book/${id}`;
+		return axiosRoute.get(url);
 	},
 	search(query) {
-		const url = `/book/search?q=${query}`;
-		return axiosAdmin.get(url);
+		const url = `admin/book/search?q=${query}`;
+		return axiosRoute.get(url);
 	},
 	update(id, data) {
-		const url = `/book/update/${id}`;
-		return axiosAdmin.put(url, data);
+		const url = `admin/book/update/${id}`;
+		return axiosRoute.put(url, data);
 	},
 	delete(id) {
-		const url = `/book/${id}`;
-		return axiosAdmin.delete(url);
+		const url = `admin/book/${id}`;
+		return axiosRoute.delete(url);
 	},
 	isbnExists(isbn) {
 		console.log('isbn', isbn);
-		const url = '/book/isbnExists';
-		return axiosAdmin.get(url, isbn);
+		const url = 'admin/book/isbnExists';
+		return axiosRoute.get(url, isbn);
 	},
 };
 

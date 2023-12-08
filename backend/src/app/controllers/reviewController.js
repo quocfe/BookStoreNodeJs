@@ -26,7 +26,6 @@ const reviewController = {
 	selectOne: async (req, res) => {
 		const id = req.params.id;
 		try {
-			await Review.updateView(id);
 			const reviews = await Review.selectOne(id);
 			res.status(200).json(reviews);
 		} catch (error) {
@@ -88,6 +87,15 @@ const reviewController = {
 
 			const review = await Review.selectReviewWithProduct(idProduct);
 			res.status(200).json(review);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
+	updateView: async (req, res) => {
+		const id = req.params.id;
+		try {
+			await Review.updateView(id);
+			res.status(200).json('view update');
 		} catch (error) {
 			res.status(500).json(error);
 		}

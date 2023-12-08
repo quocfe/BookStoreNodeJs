@@ -2,15 +2,11 @@ import axios from 'axios';
 import authApi from './client/auth';
 import userApi from './client/user';
 
-const axiosClient = axios.create({
+const axiosRoute = axios.create({
 	baseURL: 'http://localhost:3000/v1/api/',
 });
 
-const axiosAdmin = axios.create({
-	baseURL: 'http://localhost:3000/v1/api/admin',
-});
-
-axiosClient.interceptors.request.use(
+axiosRoute.interceptors.request.use(
 	(config) => {
 		const accessToken = localStorage.getItem('accessToken');
 		if (accessToken) {
@@ -23,7 +19,7 @@ axiosClient.interceptors.request.use(
 	}
 );
 
-axiosClient.interceptors.response.use(
+axiosRoute.interceptors.response.use(
 	(response) => {
 		return response;
 	},
@@ -60,4 +56,4 @@ axiosClient.interceptors.response.use(
 	}
 );
 
-export { axiosClient, axiosAdmin };
+export default axiosRoute;

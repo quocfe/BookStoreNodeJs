@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Star from '../../../BookDetails/component/Star/Star';
 import './RatingAverage.css';
 import commentsApi from '../../../../../api/client/comments';
+import { isNumber } from 'lodash';
 
-const RatingAverage = ({ idReview }) => {
+const RatingAverage = ({ idReview, totalComments }) => {
 	const [comments, setComments] = useState([]);
 
 	useEffect(() => {
@@ -22,8 +23,6 @@ const RatingAverage = ({ idReview }) => {
 		(comment) => comment.idReview == idReview
 	);
 
-	let totalRating = filterComment.length;
-
 	let average = () => {
 		const initialValue = 0;
 		const sum = filterComment.reduce(
@@ -31,7 +30,7 @@ const RatingAverage = ({ idReview }) => {
 			initialValue
 		);
 
-		const averageRating = sum / +totalRating;
+		const averageRating = sum / totalComments;
 
 		return averageRating.toFixed(0);
 	};
@@ -42,9 +41,9 @@ const RatingAverage = ({ idReview }) => {
 				<div className="col-lg-12">
 					<div className="row">
 						<div className="col-sm-6 text-center d-flex flex-column justify-content-center align-center ">
-							<p className="fs-1 mb-0">{average() ? average() : 0}/5</p>
+							<p className="fs-1 mb-0">{average() != '0' ? average() : 0}/5</p>
 							<Star rating={average()} />
-							<p>({totalRating ? totalRating : 0} đánh giá)</p>
+							<p>({totalComments ? totalComments : 0} đánh giá)</p>
 						</div>
 
 						<div className="col-sm-6">

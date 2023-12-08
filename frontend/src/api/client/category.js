@@ -1,29 +1,29 @@
-import { axiosClient } from '../config';
+import axiosRoute from '../config';
 
 const categoryApi = {
 	insert(data) {
 		const url = 'category/add';
-		return axiosClient.post(url, data);
+		return axiosRoute.post(url, data);
 	},
 	getAll() {
 		const url = `category`;
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 	getOne(id) {
 		const url = `category/${id}`;
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 	search(query) {
 		const url = `category/search?q=${query}`;
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 	update(id, data) {
 		const url = `category/update/${id}`;
-		return axiosClient.put(url, data);
+		return axiosRoute.put(url, data);
 	},
 	delete(id) {
 		const url = `category/${id}`;
-		return axiosClient.delete(url);
+		return axiosRoute.delete(url);
 	},
 };
 

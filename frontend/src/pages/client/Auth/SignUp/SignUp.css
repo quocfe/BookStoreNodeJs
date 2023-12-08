@@ -35,6 +35,17 @@
 	color: var(--white-color);
 	width: 100%;
 	border-radius: 8px;
-	padding: 12px 0;
+	height: 40px;
 	font-size: 16px;
+}
+
+.link {
+	font-size: 14px;
+	margin-top: 20px;
+	display: inline-block;
+	font-weight: 500;
+}
+
+.link a {
+	color: var(--purple-color);
 }

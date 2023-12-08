@@ -6,21 +6,15 @@ const commentSlice = createSlice({
 		data: [],
 	},
 	reducers: {
-		setComments: (state, action) => {
-			if (!Array.isArray(state.data)) {
-				state.data = [];
-			}
-
-			if (Array.isArray(action.payload)) {
-				state.data = [...state.data, ...action.payload];
-			} else {
-				state.data = [...state.data, action.payload];
-			}
+		addComments: (state, action) => {
+			state.data = action.payload;
 		},
-		fetchComments: (state, action) => {},
+		addComment: (state, action) => {
+			state.data = [...state.data, action.payload];
+		},
 	},
 });
 
-export const { setComments } = commentSlice.actions;
+export const { addComments, addComment } = commentSlice.actions;
 
 export default commentSlice.reducer;

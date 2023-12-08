@@ -1,4 +1,5 @@
-import reviewApi from '../api/client/review';
+import { useEffect } from 'react';
+import commentsApi from '../api/client/comments';
 import authApi from './../api/client/auth';
 import booksApi from './../api/client/books';
 import {
@@ -13,6 +14,7 @@ import {
 	registerSuccess,
 } from './authSlice';
 import { searchBook as searchFetch, setSearchStatus } from './bookSlice';
+import { addComments } from './commentSlice';
 
 const loginUser = async (user, dispatch, navigate) => {
 	dispatch(loginStart());
@@ -70,6 +72,7 @@ const logOut = async (dispatch, navigate) => {
 const searchBook = async (query, dispatch, navigate) => {
 	try {
 		const response = await booksApi.search(query);
+		console.log(response.data);
 		dispatch(searchFetch(response.data));
 		navigate('/');
 	} catch (error) {
@@ -90,4 +93,13 @@ const fetchBook = async (query, dispatch, navigate) => {
 	}
 };
 
-export { loginUser, registerUser, searchBook, fetchBook, logOut };
+const fetchComment = async (query, dispatch) => {
+	try {
+		const responseComment = await commentsApi.getAllByIdProduct(query);
+		dispatch(addComments(responseComment.data));
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export { fetchBook, fetchComment, logOut, loginUser, registerUser, searchBook };

@@ -11,6 +11,7 @@ import Review from '../pages/client/Review/Review';
 import BookDetails from './../pages/client/BookDetails/BookDetails';
 import PrivateRoute from './PrivateRoute';
 import ReviewDetails from '../pages/client/ReviewDetails/ReviewDetails';
+import PrivateRouteAdmin from './PrivateRouteAdmin';
 
 const RoutesManage = () => {
 	return (
@@ -24,13 +25,15 @@ const RoutesManage = () => {
 					<Route path="/review" element={<Review />} />
 					<Route path="/review/:id" element={<ReviewDetails />} />
 				</Route>
-				<Route path="/admin" element={<Dashboad />} />
-				<Route path="/admin/book" element={<View />} />
-				<Route path="/admin/book/:id" element={<View />} />
-				<Route path="/admin/add/book" element={<View />} />
-				<Route path="/admin/category" element={<ViewCate />} />
-				<Route path="/admin/category/:id" element={<ViewCate />} />
-				<Route path="/admin/review" element={<ViewReview />} />
+				<Route element={<PrivateRouteAdmin />}>
+					<Route path="/admin" element={<Dashboad />} />
+					<Route path="/admin/book" element={<View />} />
+					<Route path="/admin/book/:id" element={<View />} />
+					<Route path="/admin/add/book" element={<View />} />
+					<Route path="/admin/category" element={<ViewCate />} />
+					<Route path="/admin/category/:id" element={<ViewCate />} />
+					<Route path="/admin/review" element={<ViewReview />} />
+				</Route>
 			</Routes>
 		</BrowserRouter>
 	);

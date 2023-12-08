@@ -1,58 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import StarRating from '../../../../../components/StarRating/StarRating';
-import './FormComment.css';
-import { useParams } from 'react-router-dom';
-import reviewApi from './../../../../../api/client/review';
-import commentsApi from './../../../../../api/client/comments';
 import { useDispatch } from 'react-redux';
-import { setComments } from '../../../../../redux/commentSlice';
+import StarRating from '../../../../../components/StarRating/StarRating';
+import { addComment } from '../../../../../redux/commentSlice';
+import commentsApi from './../../../../../api/client/comments';
+import './FormComment.css';
 
-const FormComment = () => {
+const getCurrentDay = () => {
+	const currentDate = new Date();
+	const day = String(currentDate.getDate()).padStart(2, '0');
+	const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+	const year = currentDate.getFullYear();
+	return `${year}-${month}-${day}T${currentDate
+		.toISOString()
+		.slice(11, 19)}.000Z`;
+};
+
+const FormComment = ({ idProduct, idReview }) => {
+	const userCurrent = JSON.parse(localStorage.getItem('user'));
+	const dispatch = useDispatch();
+
 	const [comment, setComment] = useState({
 		content: '',
 		rating: 1,
-		idUser: 0,
-		idReview: 0,
-		idProduct: 0,
+		idUser: userCurrent.id,
+		idReview: +idReview,
+		idProduct: idProduct,
 	});
-	const { id } = useParams();
-	const dispatch = useDispatch();
 
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const { data } = await reviewApi.getOne(id);
-				setComment((prev) => ({
-					...prev,
-					idUser: data[0].idUser,
-					idReview: data[0].idReview,
-					idProduct: data[0].idProduct,
-				}));
-			} catch (error) {
-				console.log(error);
-			}
-		};
-		fetchData();
-	}, []);
+		if (idProduct !== undefined) {
+			setComment((prev) => ({ ...prev, idProduct: idProduct }));
+		}
+	}, [idProduct, idReview]);
 
 	const onRatingChange = (data = 1) => {
-		setComment((prev) => ({
-			...prev,
-			rating: data,
-		}));
+		setComment((prev) => ({ ...prev, rating: data }));
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		if (comment.content.trim() === '') {
+			alert('Vui lòng nhập nội dung!');
+			return;
+		}
+
 		try {
 			await commentsApi.insert(comment);
-			dispatch(setComments(comment));
+			const cloneComment = {
+				...comment,
+				username: userCurrent.username,
+				createAt: getCurrentDay(),
+			};
+
+			dispatch(addComment(cloneComment));
+
 			setComment({
 				content: '',
+				rating: 1,
+				idUser: userCurrent.id,
+				idReview: +idReview,
+				idProduct: +idProduct,
 			});
-			onRatingChange(0);
+
+			onRatingChange(1);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -60,27 +73,27 @@ const FormComment = () => {
 		<div className="container" id="form-comment">
 			<div className="row px-5 py-3 mb-5 mt-5">
 				<div className="col-lg-12">
-					<form className="">
+					<form>
 						<div className="form-group">
 							<textarea
-								className="border w-100 "
+								className="border w-100"
 								type="text"
 								placeholder="comment..."
 								value={comment.content}
 								onChange={(e) =>
 									setComment((prev) => ({ ...prev, content: e.target.value }))
 								}
-							></textarea>
+							/>
 							<StarRating onRatingChange={onRatingChange} />
 						</div>
+						<button
+							className="btn btn-primary w-25"
+							type="submit"
+							onClick={handleSubmit}
+						>
+							Comment
+						</button>
 					</form>
-					<button
-						className="btn btn-primary w-25"
-						type="submit"
-						onClick={(e) => handleSubmit(e)}
-					>
-						Comment
-					</button>
 				</div>
 			</div>
 		</div>

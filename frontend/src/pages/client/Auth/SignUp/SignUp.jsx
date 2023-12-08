@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { loginUser, registerUser } from '../../../../redux/apiRequest';
 import './SignUp.css';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
 	const [username, setUsername] = useState('');
@@ -59,6 +59,10 @@ const SignUp = () => {
 					<button className="btn-signUp" type="submit">
 						Sign Up
 					</button>
+
+					<p className="link">
+						Have an account? <Link to="/signin">Sign in</Link>
+					</p>
 				</form>
 			</div>
 		</div>

@@ -7,6 +7,7 @@ import Header from './../../../components/Header/Header';
 import SeeMore from './../../../components/SeeMore/SeeMore';
 import './BookDetails.css';
 import SlideShow from './component/SlideShow/SlideShow';
+import reviewApi from '../../../api/client/review';
 
 const BookDetails = () => {
 	const { id } = useParams();
@@ -50,36 +51,36 @@ const BookDetails = () => {
 						<FaArrowLeft size={22} />
 						<span className="fs-18 fw-6">Go Back</span>
 					</button>
-
-					<div className="book-details-content grid ">
-						<div className="book-details-img">
-							<img src={book[0]?.images} alt="cover img" />
-						</div>
-						<div className="book-details-info">
-							<div className="book-details-item title">
-								<span className="fw-6 fs-24">{book[0]?.nameProduct}</span>
+					<div className="row">
+						<div className="book-details-content grid ">
+							<div className="book-details-img">
+								<img src={book[0]?.images} alt="cover img" />
 							</div>
-							<div className="book-details-item description">
-								<div dangerouslySetInnerHTML={createMarkup()} />
+							<div className="book-details-info">
+								<div className="book-details-item title">
+									<span className="fw-6 fs-24">{book[0]?.nameProduct}</span>
+								</div>
+								<div className="book-details-item description">
+									<div dangerouslySetInnerHTML={createMarkup()} />
+								</div>
+								<div className="book-details-item">
+									<span className="fw-6">Author: </span>
+									<span className="text-italic">{book[0]?.authorProduct}</span>
+								</div>
+								<div className="book-details-item">
+									<span className="fw-6">Publish year: </span>
+									<span className="text-italic">{book[0]?.year}</span>
+								</div>
+								<div className="book-details-item">
+									<span className="fw-6">Isbn:</span>
+									<span> {book[0]?.isbn}</span>
+								</div>
+								<Link to={`/review`} className="btn btn-primary btnShowReview">
+									Xem review
+								</Link>
 							</div>
-							<div className="book-details-item">
-								<span className="fw-6">Author: </span>
-								<span className="text-italic">{book[0]?.authorProduct}</span>
-							</div>
-							<div className="book-details-item">
-								<span className="fw-6">Publish year: </span>
-								<span className="text-italic">{book[0]?.year}</span>
-							</div>
-							<div className="book-details-item">
-								<span className="fw-6">Isbn:</span>
-								<span> {book[0]?.isbn}</span>
-							</div>
-							<Link to="/review" className="btn btn-primary btnShowReview">
-								Xem review
-							</Link>
 						</div>
 					</div>
-
 					<div className="row  book-description ">
 						<div className="title mb-0">
 							<span className="fw-6 fs-24">Mô tả</span>

@@ -42,7 +42,7 @@ const authController = {
 				isAdmin: user.isAdmin,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
-			{ expiresIn: '30s' }
+			{ expiresIn: '30d' }
 		);
 	},
 	// LOGIN

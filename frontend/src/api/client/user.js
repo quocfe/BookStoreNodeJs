@@ -1,13 +1,13 @@
-import { axiosClient } from '../config';
+import axiosRoute from './../config';
 
 const userApi = {
 	getAllUser() {
 		const url = 'user';
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 	getUser(id) {
 		const url = `user/${id}`;
-		return axiosClient.get(url);
+		return axiosRoute.get(url);
 	},
 };
 

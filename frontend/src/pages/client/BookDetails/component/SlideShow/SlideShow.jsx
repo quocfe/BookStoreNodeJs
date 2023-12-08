@@ -8,6 +8,17 @@ import './SlideShow.css';
 import { Link } from 'react-router-dom';
 
 const SlideShow = ({ items }) => {
+	const scrollToTop = () => {
+		// Lấy chiều cao của header
+		const header = document.querySelector('.header');
+		const headerHeight = header?.getBoundingClientRect()?.height || 0;
+
+		window.scrollTo({
+			top: headerHeight,
+			behavior: 'smooth',
+		});
+	};
+
 	return (
 		<Swiper
 			modules={[Autoplay, Navigation, Mousewheel, Keyboard]}
@@ -24,7 +35,9 @@ const SlideShow = ({ items }) => {
 			{items?.map(({ idProduct, nameProduct, images }) => (
 				<SwiperSlide key={idProduct}>
 					<img src={images} alt="" />
-					<Link to={`/book/${idProduct}`}>{nameProduct}</Link>
+					<Link onClick={scrollToTop} to={`/book/${idProduct}`}>
+						{nameProduct}
+					</Link>
 				</SwiperSlide>
 			))}
 		</Swiper>

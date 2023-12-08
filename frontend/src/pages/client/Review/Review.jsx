@@ -17,7 +17,7 @@ const Review = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await reviewApi.getAll(1, 5);
+			const response = await reviewApi.getAll(1, 100);
 			const reviewData = await Promise.all(
 				response.data.data.map(async ({ idProduct }) => {
 					const { data } = await reviewApi.selectByProduct(idProduct);

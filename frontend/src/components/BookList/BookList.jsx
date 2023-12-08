@@ -43,7 +43,6 @@ const BookList = () => {
 		try {
 			const response = await booksApi.getByNameCate(cateSelect);
 			setDataBook(response.data);
-			console.log('fetch book 2');
 		} catch (error) {
 			console.log(error);
 		}
