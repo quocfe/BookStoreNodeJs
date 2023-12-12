@@ -49,9 +49,9 @@ const reviewController = {
 		}
 	},
 	delete: async (req, res) => {
-		const idBook = req.params.id;
+		const idReview = req.params.id;
 		try {
-			await Review.delete(idBook);
+			await Review.delete(idReview);
 			res.status(200).json('delete success');
 		} catch (error) {
 			res.status(500).json(error);
@@ -70,12 +70,10 @@ const reviewController = {
 		try {
 			const idReview = req.params.id;
 			const newReview = {
-				sortDescription: req.body.sortDescription,
 				content: req.body.content,
-				idProduct: req.body.idProduct,
 			};
 
-			await Book.update({ id: idReview }, newReview);
+			await Review.update(idReview, newReview);
 			res.status(200).json('update success');
 		} catch (error) {
 			res.status(500).json(error);

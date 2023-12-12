@@ -71,6 +71,14 @@ const BookList = () => {
 		setCateSelect(+idCate);
 	};
 
+	useEffect(() => {
+		if (books.length > 8) {
+			fetchBooks();
+		} else {
+			setDataBook(books);
+		}
+	}, [books]);
+
 	return (
 		<section className="booklist">
 			<div className="container">
@@ -113,9 +121,11 @@ const BookList = () => {
 					</div>
 				</div>
 				<div className="booklist-content grid">
-					{books.length > 0
-						? books.map((item, index) => <Book key={index} {...item} />)
-						: dataBook.map((item, index) => <Book key={index} {...item} />)}
+					{dataBook.length > 0 ? (
+						dataBook.map((item, index) => <Book key={index} {...item} />)
+					) : (
+						<h1>Kết quả không khớp!</h1>
+					)}
 				</div>
 			</div>
 		</section>

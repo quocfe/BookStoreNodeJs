@@ -17,7 +17,7 @@ const RatingAverage = ({ idReview, totalComments }) => {
 			}
 		};
 		fetchData();
-	}, []);
+	}, [totalComments]);
 
 	const filterComment = comments.filter(
 		(comment) => comment.idReview == idReview
@@ -30,9 +30,13 @@ const RatingAverage = ({ idReview, totalComments }) => {
 			initialValue
 		);
 
-		const averageRating = sum / totalComments;
+		let averageRating = sum / totalComments;
 
-		return averageRating.toFixed(0);
+		if (isNaN(averageRating)) {
+			return (averageRating = 0);
+		} else {
+			return averageRating.toFixed(0);
+		}
 	};
 
 	return (
@@ -41,7 +45,9 @@ const RatingAverage = ({ idReview, totalComments }) => {
 				<div className="col-lg-12">
 					<div className="row">
 						<div className="col-sm-6 text-center d-flex flex-column justify-content-center align-center ">
-							<p className="fs-1 mb-0">{average() != '0' ? average() : 0}/5</p>
+							<p className="fs-1 mb-0">
+								{average() != '0' ? average() : '0'}/5
+							</p>
 							<Star rating={average()} />
 							<p>({totalComments ? totalComments : 0} đánh giá)</p>
 						</div>

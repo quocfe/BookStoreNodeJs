@@ -14,7 +14,6 @@ const InfiniteScroll = ({
 		if (hasMore) {
 			const observer = new IntersectionObserver((entries) => {
 				if (entries[0].isIntersecting) {
-					// kiểm tra element có nằm trong viewport không?
 					fetchMore();
 				}
 			});

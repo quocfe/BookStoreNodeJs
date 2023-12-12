@@ -33,6 +33,7 @@ const RoutesManage = () => {
 					<Route path="/admin/category" element={<ViewCate />} />
 					<Route path="/admin/category/:id" element={<ViewCate />} />
 					<Route path="/admin/review" element={<ViewReview />} />
+					<Route path="/admin/review/:id" element={<ViewReview />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

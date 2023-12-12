@@ -1,6 +1,7 @@
 import axios from 'axios';
 import authApi from './client/auth';
 import userApi from './client/user';
+import { jwtDecode } from 'jwt-decode';
 
 const axiosRoute = axios.create({
 	baseURL: 'http://localhost:3000/v1/api/',
@@ -33,7 +34,15 @@ axiosRoute.interceptors.response.use(
 			const { data } = await userApi.getUser(user.id);
 			const refreshToken = data[0].refreshToken;
 			const idUser = data[0].idUser;
-			if (refreshToken) {
+			const decoded = jwtDecode(refreshToken);
+
+			if (decoded.exp < Date.now() / 1000) {
+				alert('Phiên đăng nhập hết hạn! Vui lòng đăng nhập lại');
+				window.location.href = '/signin';
+				localStorage.removeItem('accessToken');
+				localStorage.removeItem('user');
+				return;
+			} else {
 				const dataRefreshToken = {
 					refreshToken: refreshToken,
 					idUser: idUser,
@@ -43,7 +52,6 @@ axiosRoute.interceptors.response.use(
 					const refreshResponse = await authApi.refreshToken(dataRefreshToken);
 					const newAccessToken = refreshResponse.data.accessToken;
 					localStorage.setItem('accessToken', newAccessToken);
-
 					originalRequest.headers.token = 'Bearer ' + newAccessToken;
 					return axios(originalRequest);
 				} catch (error) {

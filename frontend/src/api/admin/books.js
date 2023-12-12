@@ -5,8 +5,8 @@ const booksAdminApi = {
 		const url = 'admin/book/add';
 		return axiosRoute.post(url, data);
 	},
-	getAll() {
-		const url = `admin/book/?page=1&limit=100`;
+	getAll(page = 1, limit = 100) {
+		const url = `admin/book/?page=${page}&limit=${limit}`;
 		return axiosRoute.get(url);
 	},
 	getOne(id) {

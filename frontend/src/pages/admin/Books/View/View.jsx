@@ -1,6 +1,6 @@
+import { orderBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import booksAdminApi from '../../../../api/admin/books';
 import { Toastify } from '../../../../components/Toast/Toast';
@@ -8,14 +8,15 @@ import Layout from '../../Layout/Layout';
 import Add from '../Add/Add';
 import Update from '../Update/Update';
 import './View.css';
-import { orderBy } from 'lodash';
+import Pagination from '../../../../components/Paginate/Paginate';
 
 const View = () => {
 	const [books, setBooks] = useState([]);
 	const [showAddForm, setShowAddForm] = useState(false);
 	const [showEditForm, setShowEditForm] = useState(false);
 	const [selectedBook, setSelectedBook] = useState(null);
-	const dispatch = useDispatch();
+	const [page, setPage] = useState(1);
+	const [pagination, setPagination] = useState({});
 
 	const handleShowAddForm = (book) => setShowAddForm(true);
 	const handleCloseAddForm = () => setShowAddForm(false);
@@ -38,13 +39,15 @@ const View = () => {
 	useEffect(() => {
 		async function fetchData() {
 			try {
-				const response = await booksAdminApi.getAll();
+				const response = await booksAdminApi.getAll(page, 5);
 				if (response.status === 200) {
+					setPagination(response.data.pagination);
 					const sortedBooks = orderBy(
 						response.data.data,
-						['idProduct'],
+						['createAt'],
 						['desc']
 					);
+					console.log('sortedBooks', sortedBooks);
 					setBooks(sortedBooks);
 				}
 			} catch (error) {
@@ -52,7 +55,11 @@ const View = () => {
 			}
 		}
 		fetchData();
-	}, []);
+	}, [page]);
+
+	const handlePageClick = ({ selected }) => {
+		setPage(selected + 1);
+	};
 
 	return (
 		<Layout>
@@ -143,6 +150,10 @@ const View = () => {
 							)}
 						</tbody>
 					</table>
+					<Pagination
+						pageCount={pagination.totalPage}
+						handlePageClick={handlePageClick}
+					/>
 				</div>
 			</div>
 		</Layout>

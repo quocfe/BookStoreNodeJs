@@ -49,3 +49,10 @@
 .link a {
 	color: var(--purple-color);
 }
+
+.signIn span {
+	color: red;
+	font-size: 12px;
+	font-weight: 500;
+	text-indent: 10px;
+}

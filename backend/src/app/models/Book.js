@@ -49,7 +49,7 @@ const Book = {
 	},
 
 	selectAll: async (limit, offset) => {
-		const sql = `SELECT * FROM books limit ? offset ?`;
+		const sql = `SELECT * FROM books limit ? offset ? `;
 
 		try {
 			const results = await executeQuery(sql, [+limit, +offset]);

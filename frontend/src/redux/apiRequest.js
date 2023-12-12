@@ -20,7 +20,6 @@ const loginUser = async (user, dispatch, navigate) => {
 	dispatch(loginStart());
 	try {
 		const response = await authApi.login(user);
-
 		const { accessToken, username, password, isAdmin } = response.data.user;
 		const newUser = {
 			username,
@@ -40,7 +39,7 @@ const loginUser = async (user, dispatch, navigate) => {
 			navigate('/');
 		}
 	} catch (error) {
-		dispatch(loginFail());
+		dispatch(loginFail(error.response.data));
 	}
 };
 
@@ -49,6 +48,7 @@ const registerUser = async (user, dispatch, navigate) => {
 	try {
 		await authApi.register(user);
 		dispatch(registerSuccess());
+		alert('Đăng kí thành công');
 		navigate('/signin');
 	} catch (error) {
 		dispatch(registerFail());
@@ -72,7 +72,6 @@ const logOut = async (dispatch, navigate) => {
 const searchBook = async (query, dispatch, navigate) => {
 	try {
 		const response = await booksApi.search(query);
-		console.log(response.data);
 		dispatch(searchFetch(response.data));
 		navigate('/');
 	} catch (error) {

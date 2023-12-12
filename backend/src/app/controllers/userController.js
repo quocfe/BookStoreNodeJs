@@ -13,7 +13,11 @@ const userController = {
 		const id = req.params.id;
 		try {
 			const user = await User.selectOne({ idUser: id });
-			res.status(200).json(user);
+			if (user.length > 0) {
+				res.status(200).json(user);
+			} else {
+				res.status(404).json('User not exist');
+			}
 		} catch (error) {
 			res.status(500).json(error);
 		}

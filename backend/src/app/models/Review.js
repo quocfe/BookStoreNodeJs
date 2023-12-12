@@ -51,7 +51,7 @@ const Review = {
 	},
 
 	delete: async (id) => {
-		const sql = `DELETE FROM books WHERE idProduct = ?`;
+		const sql = `DELETE FROM review WHERE idReview = ?`;
 
 		try {
 			const results = await executeQuery(sql, [id]);
@@ -61,13 +61,11 @@ const Review = {
 		}
 	},
 
-	update: async ({ id }, { sortDescription, content }) => {
-		const sql = `UPDATE review 
-					SET sortDescription = ?,
-							content = ?,
-					WHERE idReview = ?`;
+	update: async (id, { content }) => {
+		console.log(id, content);
+		const sql = `UPDATE review SET content = ? WHERE idReview = ?`;
 
-		const values = [sortDescription, content + id];
+		const values = [content, +id];
 
 		try {
 			const results = await executeQuery(sql, values);

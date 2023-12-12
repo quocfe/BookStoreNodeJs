@@ -1,24 +1,54 @@
-import React, { useState } from 'react';
-import { loginUser, registerUser } from '../../../../redux/apiRequest';
+import React, { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { registerUser } from '../../../../redux/apiRequest';
 import './SignUp.css';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import userApi from '../../../../api/client/user';
 
 const SignUp = () => {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-	const [email, setEmail] = useState('');
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		watch,
+	} = useForm();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [users, setUsers] = useState([]);
+	const password = useRef({});
+	password.current = watch('password', '');
 
-	const handleRegister = (e) => {
-		e.preventDefault();
-		const newUser = {
-			username,
-			email,
-			password,
+	useEffect(() => {
+		const fetchUsers = async () => {
+			const response = await userApi.getAllUser();
+			setUsers(response.data);
 		};
-		registerUser(newUser, dispatch, navigate);
+
+		fetchUsers();
+	}, []);
+
+	const validateEmail = (value) => {
+		const existingEmail = users.find((user) => user.email === value);
+		return !existingEmail ? true : 'Email đã tồn tại';
+	};
+
+	const validateUsername = (value) => {
+		const existingUser = users.find((user) => user.username === value);
+		return !existingUser ? true : 'Username đã tồn tại';
+	};
+
+	const validateConfirm = (value) => {
+		return value === password.current ? true : ' Mật khẩu không khớp ';
+	};
+
+	const onSubmit = (data) => {
+		const user = {
+			username: data.username,
+			email: data.email,
+			password: data.password,
+		};
+		registerUser(user, dispatch, navigate);
 	};
 
 	return (
@@ -27,24 +57,38 @@ const SignUp = () => {
 				<div className="section-title">
 					<h2>Sign Up</h2>
 				</div>
-				<form className="signUp-form" method="post" onSubmit={handleRegister}>
+				<form className="signUp-form" onSubmit={handleSubmit(onSubmit)}>
 					<div className="form-group flex flex-column">
-						<label htmlFor="email">email</label>
+						<label htmlFor="email">Email</label>
 						<input
 							type="text"
 							name="email"
 							placeholder="email"
-							onChange={(e) => setEmail(e.target.value)}
+							{...register('email', {
+								required: true,
+								validate: validateEmail,
+							})}
 						/>
+						{errors.email?.type === 'required' && (
+							<span>Trường này không được để trống!</span>
+						)}
+						{errors.email?.message && <span>{errors.email.message}</span>}
 					</div>
 					<div className="form-group flex flex-column">
-						<label htmlFor="username">UserName</label>
+						<label htmlFor="username">Username</label>
 						<input
 							type="text"
 							name="username"
 							placeholder="username"
-							onChange={(e) => setUsername(e.target.value)}
+							{...register('username', {
+								required: true,
+								validate: validateUsername,
+							})}
 						/>
+						{errors.username?.type === 'required' && (
+							<span>Trường này không được để trống!</span>
+						)}
+						{errors.username?.message && <span>{errors.username.message}</span>}
 					</div>
 					<div className="form-group flex flex-column">
 						<label htmlFor="password">Password</label>
@@ -52,10 +96,34 @@ const SignUp = () => {
 							type="password"
 							name="password"
 							placeholder="password"
-							onChange={(e) => setPassword(e.target.value)}
+							{...register('password', { required: true, minLength: 6 })}
 						/>
+						{errors.password?.type === 'required' && (
+							<span>Trường này không được để trống!</span>
+						)}
+						{errors.password?.type === 'minLength' && (
+							<span>Mật khẩu tối thiểu 6 kí tự</span>
+						)}
 					</div>
-
+					<div className="form-group flex flex-column">
+						<label htmlFor="passwordConfirm">Password Confirmation</label>
+						<input
+							type="password"
+							name="passwordConfirm"
+							placeholder="passwordConfirm"
+							{...register('passwordConfirm', {
+								required: true,
+								minLength: 6,
+								validate: validateConfirm,
+							})}
+						/>
+						{errors.passwordConfirm?.type === 'required' && (
+							<span>Trường này không được để trống!</span>
+						)}
+						{errors.passwordConfirm?.message && (
+							<span>{errors.passwordConfirm.message}</span>
+						)}
+					</div>
 					<button className="btn-signUp" type="submit">
 						Sign Up
 					</button>

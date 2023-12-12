@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import reviewAdminApi from './../../../../api/admin/review';
-import Button from 'react-bootstrap/Button';
-import Layout from '../../Layout/Layout';
-import { Link } from 'react-router-dom';
 import orderBy from 'lodash/orderBy';
-import './View.css';
+import React, { useEffect, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
+import Layout from '../../Layout/Layout';
 import Add from '../Add/Add';
+import reviewAdminApi from './../../../../api/admin/review';
+import Pagination from './../../../../components/Paginate/Paginate';
+import { generationDate } from './../../../../helper/generationDate';
+import './View.css';
+import { Toastify } from '../../../../components/Toast/Toast';
 
 const ViewReview = () => {
 	const [reviews, setReviews] = useState([]);
 	const [showAddForm, setShowAddForm] = useState(false);
 	const [showEditForm, setShowEditForm] = useState(false);
 	const [selectedReview, setSelectedReview] = useState(null);
+	const [page, setPage] = useState(1);
+	const [pagination, setPagination] = useState({});
 
 	const handleShowAddForm = (book) => setShowAddForm(true);
 	const handleCloseAddForm = () => setShowAddForm(false);
@@ -22,11 +27,10 @@ const ViewReview = () => {
 	};
 	const handleCloseEditForm = () => setShowEditForm(false);
 
-	const handleDelete = async () => {};
-
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await reviewAdminApi.getAll(1, 100);
+			const response = await reviewAdminApi.getAll(page, 5);
+			setPagination(response.data.pagination);
 			if (response.status === 200) {
 				const sortedReviews = orderBy(
 					response.data.data,
@@ -38,17 +42,19 @@ const ViewReview = () => {
 		};
 
 		fetchData();
-	}, []);
+	}, [page]);
 
-	console.log(reviews);
+	const handlePageClick = ({ selected }) => {
+		setPage(selected + 1);
+	};
 
-	const generationDate = (datetimeString) => {
-		let time;
-		let dateTime = new Date(datetimeString);
-		time = `${dateTime.getDate()}-${
-			dateTime.getMonth() + 1
-		}-${dateTime.getFullYear()}`;
-		return time;
+	const handleDelete = async (id) => {
+		const newReview = reviews.filter((review) => review.idReview != id);
+		if (newReview) {
+			await reviewAdminApi.delete(id);
+			setReviews(newReview);
+			Toastify('success', 'Delete success');
+		}
 	};
 
 	return (
@@ -99,9 +105,9 @@ const ViewReview = () => {
 									/> */}
 											</td>
 											<td>
-												<Link to={`/admin/book/`}>
+												<Link to={`/admin/review/${idReview}`}>
 													<button
-														onClick={() => handleDelete()}
+														onClick={() => handleDelete(idReview)}
 														className="btn btn-danger w-100 "
 													>
 														Xóa
@@ -114,6 +120,10 @@ const ViewReview = () => {
 							)}
 						</tbody>
 					</table>
+					<Pagination
+						pageCount={pagination.totalPage}
+						handlePageClick={handlePageClick}
+					/>
 				</div>
 			</div>
 		</Layout>

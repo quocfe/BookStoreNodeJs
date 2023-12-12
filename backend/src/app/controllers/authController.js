@@ -18,10 +18,15 @@ const authController = {
 				email: req.body.email,
 				password: hash,
 			};
-			const user = await User.insert(newUser);
-			res.status(200).json(user);
+			await User.insert(newUser);
+			res.status(200).json({
+				message: 'register success',
+			});
 		} catch (error) {
-			next(error);
+			console.error(error);
+			res.status(500).json({
+				error: 'Registration failed. Please try again later.',
+			});
 		}
 	},
 	// GENERATEACCESSTOKEN
@@ -30,7 +35,7 @@ const authController = {
 			{ id: user.idUser, isAdmin: user.isAdmin },
 			process.env.ACCESS_TOKEN_SECRET,
 			{
-				expiresIn: '30s',
+				expiresIn: '10s',
 			}
 		);
 	},
@@ -61,7 +66,7 @@ const authController = {
 			);
 
 			if (!isPassword) {
-				return res.status(404).send('Incorrect password');
+				return res.status(404).json('Incorrect password');
 			}
 
 			const accessToken = authController.generateAccessToken(user[0]);
@@ -69,9 +74,18 @@ const authController = {
 
 			await User.updateRefeshToken(refreshToken, user[0].idUser);
 
-			const newUser = { ...user[0], accessToken };
+			const newUser = {
+				...user[0],
+				refreshToken: refreshToken,
+				accessToken: accessToken,
+			};
 
-			return res.json({ user: newUser });
+			const data = {
+				user: newUser,
+				message: 'Login success',
+			};
+
+			return res.json(data);
 			//
 		} catch (error) {
 			return next(error);
@@ -79,10 +93,8 @@ const authController = {
 	},
 	// REQUESTREFRESHTOKEN
 	requestRefreshToken: async (req, res) => {
-		//Take refresh token from user
 		const refreshToken = req.body.refreshToken;
 		const idUser = req.body.idUser;
-		//Send error if token is not valid
 		if (!refreshToken) return res.status(401).json("You're not authenticated");
 		const user = await User.selectOne({ idUser: idUser });
 		userArr.push(user[0]);

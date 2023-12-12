@@ -8,6 +8,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 import connection from './config/connect.js';
 import bodyParser from 'body-parser';
+import swaggerUI from 'swagger-ui-express';
+import YAML from 'yaml';
+import fs from 'fs';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -35,6 +38,11 @@ app.set('views', path.join(__dirname, 'resources/views'));
 // routes
 routes(app);
 //
+
+// const file = fs.readFileSync('./swagger.yaml', 'utf8');
+const file = fs.readFileSync(path.join(__dirname, 'swagger.yaml'), 'utf8');
+const swaggerDocument = YAML.parse(file);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.listen(3000, () => {
 	console.log('App listen port 3000');
