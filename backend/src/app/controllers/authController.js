@@ -18,6 +18,7 @@ const authController = {
 				email: req.body.email,
 				password: hash,
 			};
+
 			await User.insert(newUser);
 			res.status(200).json({
 				message: 'register success',
