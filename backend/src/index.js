@@ -1,16 +1,13 @@
+import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
-import routes from './routers/index.js';
+import { engine } from 'express-handlebars';
+import morgan from 'morgan';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { engine } from 'express-handlebars';
-import cors from 'cors';
-import morgan from 'morgan';
 import connection from './config/connect.js';
-import bodyParser from 'body-parser';
-import swaggerUI from 'swagger-ui-express';
-import YAML from 'yaml';
-import fs from 'fs';
+import routes from './routers/index.js';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -40,12 +37,12 @@ routes(app);
 //
 
 // const file = fs.readFileSync('./swagger.yaml', 'utf8');
-const file = fs.readFileSync(path.join(__dirname, 'swagger.yaml'), 'utf8');
-const swaggerDocument = YAML.parse(file);
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+// const file = fs.readFileSync(path.join(__dirname, 'swagger.yaml'), 'utf8');
+// const swaggerDocument = YAML.parse(file);
+// app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.listen(3000, () => {
-	console.log('App listen port 3000');
+app.listen(8080, () => {
+	console.log('Nodejs app is running on the port 8080');
 	connection.connect((err) => {
 		if (err) {
 			console.log('Database disconnect', err);

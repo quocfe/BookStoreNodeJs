@@ -1,0 +1,951 @@
+openapi: 3.0.3
+info:
+  title: Swagger BookStore
+  description: Book Store RestFullAPi
+  version: 1.0.11
+servers:
+  - url: http://localhost:3000/v1/api
+tags:
+  - name: Auth
+    description: Authentication
+  - name: Books
+    description: Access to Books
+  - name: Users
+    description: Operations about User
+  - name: Category
+    description: Access to Category
+  - name: Review
+    description: Access to Review
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      operationId: Register
+      requestBody:
+        description: Register new user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: quocnppd06999
+                password:
+                  type: string
+                  example: 123456789
+                email:
+                  type: string
+                  example: quocnppd06999@gmail.com
+        required: true
+      responses:
+        '200':
+          description: Register success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    example: Register success
+
+        '500':
+          description: Registration failed. Please try again later.
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      operationId: Login
+      description: Login user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: quocnppd06999
+                password:
+                  type: string
+                  example: 123456789
+        required: true
+      responses:
+        '200':
+          description: Login success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    example:
+                      idUser: 2
+                      username: quocnppd06999
+                      email: quocnppd06999@edu.vn
+                      password: $2b$10$LF6wcimLYNj9kW.F/cM6eOQklwYroUHszUZvb0c6mC8Nve1AE14PC
+                      isAdmin: false
+                      createdAt: 2023-11-10T03:10:25.000Z
+                      updatedAt: 2023-11-10T03:10:25.000Z
+                      refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluIjoiZmFsc2UiLCJpYXQiOjE3MDIxMTU2NzMsImV4cCI6MTcwNDcwNzY3M30.F27rp_zmARYIPdfUX-0fW5XZrFMUj6eIib7aEWBO7Zg
+                      accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaXNBZG1pbiI6ImZhbHNlIiwiaWF0IjoxNzAyMTkyNzg0LCJleHAiOjE3MDIxOTI4MTR9.yXQstYR1Zh8LI_NQYQr6kozpFTlRDGYEZYXPmtUbP60
+                  message:
+                    type: string
+                    example: Login success
+        '404':
+          description: Login fail
+  /auth/refreshToken:
+    post:
+      tags:
+        - Auth
+      operationId: Refreshtoken
+      description: Refreshtoken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluIjoiZmFsc2UiLCJpYXQiOjE3MDE4NTcxNTYsImV4cCI6MTcwMTg1NzE4Nn0.J0ldtd3_o5224q65AWZkgYjvfhO_37O2R4EG0XxOL0c
+                idUser:
+                  example: 2
+        required: true
+      responses:
+        '200':
+          description: refreshtoken success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaXNBZG1pbiI6ImZhbHNlIiwiaWF0IjoxNzAyMTk0MDQ0LCJleHAiOjE3MDIxOTQwNzR9.N3_Ikq9Acqxoq0ypAh43GE9Zmb26_bZwiLpftqTZ9qE
+
+        '403':
+          description: Refresh token is not valid
+  /book:
+    get:
+      tags:
+        - Books
+      operationId: Get books
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: true
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          description: Number of books per page
+          required: true
+          schema:
+            type: integer
+          example: 100
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        idProduct:
+                          type: integer
+                        nameProduct:
+                          type: string
+                        authorProduct:
+                          type: string
+                        sortDescription:
+                          type: string
+                        description:
+                          type: string
+                        priceProduct:
+                          type: number
+                        images:
+                          type: string
+                        year:
+                          type: string
+                        isbn:
+                          type: string
+                        view:
+                          type: integer
+                        idCategory:
+                          type: integer
+                  pagination:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      limit:
+                        type: integer
+                      totalPage:
+                        type: integer
+  /book/{id}:
+    get:
+      tags:
+        - Books
+      operationId: getbook
+      parameters:
+        - name: id
+          in: path
+          description: get book
+          required: true
+          schema:
+            type: integer
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  idProduct:
+                    type: integer
+                  nameProduct:
+                    type: string
+                  authorProduct:
+                    type: string
+                  sortDescription:
+                    type: string
+                  description:
+                    type: string
+                  priceProduct:
+                    type: number
+                  images:
+                    type: string
+                  year:
+                    type: string
+                  isbn:
+                    type: string
+                  view:
+                    type: integer
+                  idCategory:
+                    type: integer
+  /book/search:
+    get:
+      tags:
+        - Books
+      operationId: Search
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          required: true
+          schema:
+            type: string
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Search success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  idProduct:
+                    type: integer
+                    description: Book ID
+                  nameProduct:
+                    type: string
+                    description: Book title
+                  authorProduct:
+                    type: string
+                    description: Book author
+                  sortDescription:
+                    type: string
+                    description: Short description of the book
+                  description:
+                    type: string
+                    description: Full description of the book
+                  priceProduct:
+                    type: number
+                    description: Book price
+                  images:
+                    type: string
+                    format: uri
+                    description: URL of the book cover image
+                  year:
+                    type: string
+                    description: Year of publication
+                  isbn:
+                    type: string
+                    description: ISBN of the book
+                  view:
+                    type: integer
+                    description: Number of views
+                  idCategory:
+                    type: integer
+                    description: Category ID
+  /admin/book/add:
+    post:
+      tags:
+        - Books
+      operationId: AddBook
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nameProduct:
+                  type: string
+                  description: Book title
+                  example: 'Test sách'
+                authorProduct:
+                  type: string
+                  description: Book author
+                  example: 'Tác giả 1'
+                sortDescription:
+                  type: string
+                  description: Short description of the book
+                  example: 'abc'
+                description:
+                  type: string
+                  description: Full description of the book
+                  example: 'cbd'
+                priceProduct:
+                  type: number
+                  description: Book price
+                  example: 213132
+                images:
+                  type: string
+                  format: uri
+                  description: URL of the book cover image
+                  example: 'req.body.images'
+                year:
+                  type: string
+                  description: Year of publication
+                  example: 'req.body.year'
+                isbn:
+                  type: string
+                  description: ISBN of the book
+                  example: 'req.body.isbn'
+                idCategory:
+                  type: integer
+                  description: Category ID
+                  example: 1
+      responses:
+        '200':
+          description: Book added successfully
+          content:
+            application/json:
+              example:
+                nameProduct: 'Test sách'
+                authorProduct: 'Tác giả 1'
+                sortDescription: 'abc'
+                description: 'cbd'
+                priceProduct: 213132
+                images: 'req.body.images'
+                year: 'req.body.year'
+                isbn: 'req.body.isbn'
+                idCategory: 1
+  /admin/book/{id}:
+    delete:
+      tags:
+        - Books
+      operationId: DeleteBook
+      parameters:
+        - name: id
+          in: path
+          description: ID of the book to be deleted
+          required: true
+          schema:
+            type: integer
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Delete success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Deletion message
+                  idProduct:
+                    type: integer
+                    description: ID of the deleted book
+  /admin/book/update/{id}:
+    put:
+      tags:
+        - Books
+      operationId: UpdateBook
+      parameters:
+        - name: id
+          in: path
+          description: ID of the book to be updated
+          required: true
+          schema:
+            type: integer
+        - name: bookData
+          in: path
+          description: Updated book data
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nameProduct:
+                    type: string
+                    description: Book title
+                  authorProduct:
+                    type: string
+                    description: Book author
+                  sortDescription:
+                    type: string
+                    description: Short description of the book
+                  description:
+                    type: string
+                    description: Full description of the book
+                  priceProduct:
+                    type: number
+                    description: Book price
+                  images:
+                    type: string
+                    format: uri
+                    description: URL of the book cover image
+                  year:
+                    type: string
+                    description: Year of publication
+                  isbn:
+                    type: string
+                    description: ISBN of the book
+                  idCategory:
+                    type: integer
+                    description: Category ID
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Update success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Update message
+                  updatedBook:
+                    type: object
+                    description: Updated book information
+                    properties:
+                      idProduct:
+                        type: integer
+                        description: Book ID
+                      nameProduct:
+                        type: string
+                        description: Book title
+                      authorProduct:
+                        type: string
+                        description: Book author
+                      sortDescription:
+                        type: string
+                        description: Short description of the book
+                      description:
+                        type: string
+                        description: Full description of the book
+                      priceProduct:
+                        type: number
+                        description: Book price
+                      images:
+                        type: string
+                        format: uri
+                        description: URL of the book cover image
+                      year:
+                        type: string
+                        description: Year of publication
+                      isbn:
+                        type: string
+                        description: ISBN of the book
+                      idCategory:
+                        type: integer
+                        description: Category ID
+        '404':
+          description: Book not found
+        '403':
+          description: Forbidden, insufficient permissions
+        '500':
+          description: Internal server error
+  /user:
+    get:
+      tags:
+        - Users
+      operationId: GetAllUsers
+
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    idUser:
+                      type: integer
+                      description: User ID
+                    username:
+                      type: string
+                      description: Username of the user
+                    email:
+                      type: string
+                      format: email
+                      description: Email address of the user
+                    password:
+                      type: string
+                      description: User password (hashed)
+                    isAdmin:
+                      type: boolean
+                      description: Indicates if the user is an administrator
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Date and time when the user was created
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: Date and time when the user was last updated
+                    refreshToken:
+                      type: string
+                      nullable: true
+                      description: Refresh token for user authentication (nullable)
+  /user/{id}:
+    get:
+      tags:
+        - 'Users'
+      operationId: GetUser
+      parameters:
+        - name: id
+          in: path
+          description: ID user
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    description: User ID
+                  username:
+                    type: string
+                    description: Username of the user
+                  email:
+                    type: string
+                    format: email
+                    description: Email address of the user
+                  firstName:
+                    type: string
+                    description: First name of the user
+                  lastName:
+                    type: string
+                    description: Last name of the user
+  /admin/category:
+    get:
+      tags:
+        - Category
+      operationId: GetAllCategories
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    idCategory:
+                      type: integer
+                      description: Category ID
+                    nameCategory:
+                      type: string
+                      description: Category name
+        '401':
+          description: '401'
+  /admin/category/add:
+    post:
+      tags:
+        - Category
+      operationId: AddCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nameCategory:
+                  type: string
+                  description: Category name
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '201':
+          description: Category added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    description: Add category message
+  /admin/category/{id}:
+    delete:
+      tags:
+        - Category
+      operationId: DeleteCategory
+      parameters:
+        - name: id
+          in: path
+          description: ID of the category to be deleted
+          required: true
+          schema:
+            type: integer
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Delete success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Deletion message
+                  idCategory:
+                    type: integer
+                    description: ID of the deleted book
+  /admin/category/edit/{id}:
+    get:
+      tags:
+        - Category
+      operationId: GetCategory
+      parameters:
+        - name: id
+          in: path
+          description: ID of the category to be selected
+          required: true
+          schema:
+            type: integer
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  idCategory:
+                    type: number
+                  nameCategory:
+                    type: string
+        '404':
+          description: 'Not found'
+  /admin/category/update/{id}:
+    put:
+      tags:
+        - Category
+      operationId: UpdateCategory
+      parameters:
+        - name: id
+          in: path
+          description: ID of the category to be updated
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nameCategory:
+                  type: string
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Update success
+        '404':
+          description: not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+  /review:
+    get:
+      tags:
+        - Review
+      operationId: GetAllReviews
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: true
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          description: Number of books per page
+          required: true
+          schema:
+            type: integer
+          example: 100
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: List of Reviews
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        idReview:
+                          type: integer
+                        content:
+                          type: string
+                        createAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                        view:
+                          type: integer
+                        rating:
+                          type: integer
+                        idProduct:
+                          type: integer
+                        idUser:
+                          type: integer
+                  pagination:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      limit:
+                        type: integer
+                      totalPage:
+                        type: integer
+
+        '401':
+          description: '401'
+  /review/{id}:
+    get:
+      tags:
+        - 'Review'
+      operationId: GetAllReviews
+      parameters:
+        - name: id
+          in: query
+          description: id review
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: get review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  idReview:
+                    type: integer
+                  content:
+                    type: string
+                  createAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+                  view:
+                    type: integer
+                  rating:
+                    type: integer
+                  idProduct:
+                    type: integer
+                  idUser:
+                    type: integer
+        '404':
+          description: 'Not found'
+  /review/add/:
+    post:
+      tags:
+        - Review
+      operationId: AddReview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: Review content
+                rating:
+                  type: integer
+                  description: Rating for the product (should be between 1 and 5)
+                idProduct:
+                  type: integer
+                  description: ID of the product being reviewed
+                idUser:
+                  type: integer
+                  description: ID of the user submitting the review
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '201':
+          description: Review added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Add review message
+                  addedReview:
+                    type: object
+                    description: Added review information
+                    properties:
+                      idReview:
+                        type: integer
+                        description: Review ID
+                      content:
+                        type: string
+                        description: Review content
+                      rating:
+                        type: integer
+                        description: Rating for the product
+                      idProduct:
+                        type: integer
+                        description: ID of the product being reviewed
+                      idUser:
+                        type: integer
+                        description: ID of the user submitting the review
+                      createdAt:
+                        type: string
+                        format: date-time
+                        description: Date and time when the review was created
+        '400':
+          description: Bad request, check your input data
+        '404':
+          description: Product or user not found
+        '403':
+          description: Forbidden, insufficient permissions
+        '500':
+          description: Internal server error
+  /admin/review/{id}:
+    delete:
+      tags:
+        - Review
+      operationId: DeleteReview
+      parameters:
+        - name: id
+          in: path
+          description: ID of the Review to be deleted
+          required: true
+          schema:
+            type: integer
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Delete success
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: delete success
+  /admin/review/update/{id}:
+    put:
+      tags:
+        - Review
+      operationId: UpdateReview
+      parameters:
+        - name: id
+          in: path
+          description: ID of the review to be updated
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: Updated content of the review
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Update success
+        '404':
+          description: Review not found
+        '403':
+          description: Forbidden, insufficient permissions
+        '500':
+          description: Internal server error
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Token
+      in: header
+      description: "Provide your API key with the 'Bearer' prefix"
